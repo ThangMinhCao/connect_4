@@ -7,8 +7,15 @@ const App = () => {
     <Router>
       <Switch>
         {
-          ROUTES.map((route) => {
-            return <Route path={route.patch} exact={route.exact} component={route.component} />
+          Object.entries(ROUTES).map(([routeName, route]) => {
+            return (
+              <Route
+                key={route.key}
+                path={route.patch}
+                exact={route.exact}
+                component={route.component}
+              />
+            )
           })
         }
       </Switch>
