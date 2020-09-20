@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     height: '100vh',
-    backgroundColor: COLORS.landing.background,
+    // backgroundColor: COLORS.background,
   },
 
   headerText: {
@@ -54,12 +54,8 @@ const LandingPage = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const onPlayAsGuestClick = () => {
-    history.push(ROUTES.room.patch);
-  }
-
-  const onLoginClick = () => {
-    history.push(ROUTES.login.patch);
+  const onButtonClick = (path) => {
+    history.push(path);
   }
 
   return (
@@ -70,7 +66,7 @@ const LandingPage = () => {
 
       <Button
         className={`${classes.button} ${classes.startButton}`}
-        onClick={onPlayAsGuestClick}
+        onClick={() => onButtonClick(ROUTES.room.path)}
       >
         <Typography variant="h4" className={classes.buttonText}>
           START AS A GUEST
@@ -79,7 +75,7 @@ const LandingPage = () => {
 
       <Button
         className={`${classes.button} ${classes.loginButton}`}
-        onClick={onLoginClick}
+        onClick={() => onButtonClick(ROUTES.login.path)}
       >
         <Typography variant="h4" className={classes.buttonText}>
           LOGIN

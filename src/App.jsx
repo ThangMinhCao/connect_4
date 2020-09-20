@@ -11,7 +11,7 @@ const App = () => {
             return (
               <Route
                 key={route.key}
-                path={route.patch}
+                path={route.path}
                 exact={route.exact}
                 component={route.component}
               />
