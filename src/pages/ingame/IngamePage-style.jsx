@@ -1,7 +1,7 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 import FONTS from '../../constants/fonts';
-import COLORS from '../../constants/colors';
+// import COLORS from '../../constants/colors';
 
 const IngameUseStyle = makeStyles((theme) => ({
   page: {

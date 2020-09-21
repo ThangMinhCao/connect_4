@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import uuid from 'shortid';
 import DefaultAvatar from '../../assets/default-avatar.jpg';
 
 const RoomPage = () => {
+  /* eslint-disable */
   const [avatar, setAvatar] = useState(DefaultAvatar);
   const [userID, setUserID] = useState(uuid.generate());
   const [username, setUsetName] = useState(`ID: ${userID}`);

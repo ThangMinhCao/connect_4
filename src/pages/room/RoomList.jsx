@@ -7,9 +7,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import Paper from '@material-ui/core/Paper';
 import FONTS from '../../constants/fonts';
-import COLORS from '../../constants/colors';
+// import Paper from '@material-ui/core/Paper';
+// import COLORS from '../../constants/colors';
 
 const useStyles = makeStyles({
   room: {

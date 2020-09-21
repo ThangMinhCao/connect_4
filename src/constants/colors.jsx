@@ -23,6 +23,10 @@ const COLORS = {
     redDisc: '#CC000E',
     yellowDisc: '#F5D400',
     boardBackground: '#38618C',
+
+    youWin: '#597444',
+    youLose: '#393424',
+    tie: '#FFC857',
   }
 }
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
+// import Drawer from '@material-ui/core/Drawer';
+// import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
-import DISC_COLORS from '../../constants/discColors';
+// import DISC_COLORS from '../../constants/discColors';
 
 // const drawerWidth = '100vw';
 
@@ -13,7 +13,6 @@ const useStyles = makeStyles({
   drawer: {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: '#F3FFC6',
     alignItems: 'center',
     paddingLeft: '10px',
     backgroundColor: (props) => props.yourTurn ? COLORS.game.yourTurn : COLORS.game.opponentTurn,

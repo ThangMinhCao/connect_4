@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import IngameStyle from './IngamePage-style';
+// import IngameStyle from './IngamePage-style';
 import {
   Stage,
   Layer,
   Rect,
-  Circle,
+  // Circle,
 } from 'react-konva';
 import COLORS from '../../constants/colors';
 import DISC_COLORS from '../../constants/discColors';
 
-const boardRow = 6;
-const boardColumn = 7;
+// const boardRow = 6;
+// const boardColumn = 7;
 
 const Board = ({ board, size, width, height, move }) => {
-  const [rows, cols] = size;
+  // const [rows, cols] = size;
   const generateCell = (cellSize) => {
     return (
       board.map((row, i) => (
@@ -75,7 +75,7 @@ const Board = ({ board, size, width, height, move }) => {
 const GameBoard = ({
   board, size, move
 }) => {
-  const classes = IngameStyle();
+  // const classes = IngameStyle();
 
   const generateBoardSize = () => {
     let width = window.innerWidth;
@@ -91,21 +91,20 @@ const GameBoard = ({
     height: generateBoardSize()[1],
   });
 
-  const handleSizeChange = () => {
-    const [width, height] = generateBoardSize();
-    setBoardSize({
-      width: width,
-      height: height,
-    })
-  }
-
   useEffect(() => {
+    const handleSizeChange = () => {
+      const [width, height] = generateBoardSize();
+      setBoardSize({
+        width: width,
+        height: height,
+      })
+    }
     window.addEventListener('resize', handleSizeChange);
     return () => {
       window.removeEventListener('resize', handleSizeChange);
     }
   }, [])
-// calc(10vh + 9vw)
+
   return (
     <Stage width={boardSize.width} height={boardSize.height}>
       <Layer>

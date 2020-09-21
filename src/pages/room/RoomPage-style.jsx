@@ -73,7 +73,7 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   currentGameList: {
-    width: 'calc(100vw - 385px)',
+    width: 'calc(100vw - 370px)',
     overflow: 'auto',
     background: 'transparent',
   },
