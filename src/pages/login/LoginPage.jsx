@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   loginButton: {
     height: '15vh',
-    width: '30vw',
+    width: '35vw',
     backgroundColor: COLORS.landing.login,
     '&:hover': {
       backgroundColor: COLORS.landing.loginHover,
@@ -53,8 +53,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   textFieldTextSize: {
-    fontSize: '1.5vw',
-  }
+    fontSize: 'calc(1.5vw + 1vh)',
+  },
 }));
 
 const LoginPage = () => {
@@ -63,6 +63,28 @@ const LoginPage = () => {
 
   const onButtonClick = (path) => {
     history.push(path);
+  }
+
+  const renderTextField = (label, onChangeFunction) => {
+    return (
+      <TextField
+        InputProps={{
+          classes: {
+            input: classes.textFieldTextSize
+          },
+        }}
+        InputLabelProps={{
+          classes: {
+            root: classes.textFieldTextSize
+          }
+        }}
+        className={classes.textField}
+        label={label}
+        type={label === 'Username' ? 'text' : 'password'}
+      >
+
+      </TextField>
+    )
   }
 
   return (
@@ -74,33 +96,8 @@ const LoginPage = () => {
       <Typography className={classes.headerText}>
         LOGIN
       </Typography>
-
-      <TextField
-        InputProps={{
-          classes: {
-            input: classes.textFieldTextSize
-          },
-        }}
-        className={classes.textField}
-        label="Username"
-        variant='outlined'
-      >
-
-      </TextField>
-
-      <TextField
-        InputProps={{
-          classes: {
-            input: classes.textFieldTextSize
-          },
-        }}
-        className={classes.textField}
-        label="Password"
-        variant='outlined'
-      >
-
-      </TextField>
-
+      {renderTextField('Username')}
+      {renderTextField('Password')}
       <Button
         className={classes.loginButton}
         onClick={() => onButtonClick(ROUTES.login.path)}

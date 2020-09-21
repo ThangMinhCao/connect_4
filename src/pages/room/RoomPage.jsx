@@ -79,15 +79,18 @@ const RoomPage = () => {
       <Paper elevation={0} className={classes.currentGameList}>
         <List className={classes.list} cols={6}>
           {
-            currentGames.map((game) => (
-              <ListItem className={classes.item} key={game.id}>
-                <CurrentGameCard
-                  opponentName='Opponent'
-                  opponentID='#opponentID'
-                  yourTurn={game.yourTurn}
-                />
-              </ListItem>
-            ))
+            currentGames
+              .sort((game1, game2) => game2.yourTurn - game1.yourTurn)
+              .map((game) => (
+                <ListItem className={classes.item} key={game.id}>
+                  <CurrentGameCard
+                    opponentName='Opponent'
+                    opponentID='#opponentID'
+                    yourTurn={game.yourTurn}
+                  />
+                </ListItem>
+              )
+            )
           }
         </List>
       </Paper>

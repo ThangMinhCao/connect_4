@@ -12,9 +12,17 @@ const COLORS = {
     drawer: '#81A352',
   },
 
-  currentGameCard: {
+  gameCard: {
     yourTurn: '#9FBB77',
     opponentTurn: '#FFD35C',
+  },
+
+  game: {
+    yourTurn: '#9FBB77',
+    opponentTurn: '#393424',
+    redDisc: '#CC000E',
+    yellowDisc: '#F5D400',
+    boardBackground: '#38618C',
   }
 }
 

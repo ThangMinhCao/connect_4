@@ -12,18 +12,20 @@ const useStyles = makeStyles({
     height: 150,
     width: 400,
     borderRadius: 15,
-    backgroundColor: (yourTurn) => yourTurn ? COLORS.currentGameCard.yourTurn : COLORS.currentGameCard.opponentTurn,
-    // backgroundColor: (yourTurn) => COLORS.currentGameCard.yourTurn ? yourTurn : COLORS.currentGameCard.opponentTurn,
+    backgroundColor: (yourTurn) => yourTurn ? COLORS.gameCard.yourTurn : COLORS.gameCard.opponentTurn,
   },
 
   cardButton: {
     width: '100%',
     height: '100%',
+    '&:hover': {
+      background: 'white',
+      transition: '0.5s ease-out',
+    },
   },
 
   cardText: {
     fontFamily: FONTS.pixel,
-    // fontSize: 'calc(1vw + 5px)',
   },
 });
 

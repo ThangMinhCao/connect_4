@@ -32,7 +32,7 @@ const useStyles = makeStyles({
   },
 
   inputRoot: {
-    fontFamily: '"Press Start 2P", cursive',
+    fontFamily: FONTS.pixel,
     fontSize: 20,
     paddingLeft: 15,
     borderRadius: 7,
@@ -59,12 +59,13 @@ const RoomList = ({ roomList }) => {
       <Toolbar className={classes.toolbar}>
         <SearchIcon className={classes.searchIcon} />
         <InputBase 
-          placeholder="name"
+          placeholder="Room name/ID"
           classes={{
             root: classes.inputRoot, 
           }}
         />
       </Toolbar>
+
       <List className={classes.roomList}>
         <Divider />
         {
