@@ -14,6 +14,7 @@ import uuid from 'shortid';
 import DefaultAvatar from '../../assets/default-avatar.jpg';
 
 const RoomPage = () => {
+  // TODO
   /* eslint-disable */
   const [avatar, setAvatar] = useState(DefaultAvatar);
   const [userID, setUserID] = useState(uuid.generate());

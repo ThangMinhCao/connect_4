@@ -18,6 +18,7 @@ const useStyles = makeStyles({
   cardButton: {
     width: '100%',
     height: '100%',
+    transition: '0.5s ease-out',
     '&:hover': {
       background: 'white',
       transition: '0.5s ease-out',

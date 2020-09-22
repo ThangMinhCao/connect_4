@@ -85,7 +85,7 @@ const EndGameDialog = ({ isGameEnd, winner, playerCode }) => {
   })
 
   return (
-    <Dialog fullScreen open={!isGameEnd}>
+    <Dialog fullScreen open={isGameEnd}>
       <div className={classes.page}>
         <Typography className={classes.headerText}>
           {winnerText}

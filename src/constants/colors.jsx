@@ -10,6 +10,11 @@ const COLORS = {
 
   room: {
     drawer: '#81A352',
+
+    searchBar: {
+      bar: '#81A352',
+      searchField: '#8cb05a',
+    }
   },
 
   gameCard: {
