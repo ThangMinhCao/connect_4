@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import COLORS from '../../constants/colors';
 import Typography from '@material-ui/core/Typography';
+import uuid from 'shortid';
 
 const useStyles = makeStyles((theme) => ({
   page: {
@@ -54,7 +55,12 @@ const LandingPage = () => {
   const history = useHistory();
 
   const onButtonClick = (path) => {
-    history.push(path);
+    history.push({
+      pathname: path,
+      state: {
+        userID: uuid.generate(),
+      }
+    });
   }
 
   return (

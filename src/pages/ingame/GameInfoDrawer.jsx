@@ -8,6 +8,7 @@ import COLORS from '../../constants/colors';
 // import DISC_COLORS from '../../constants/discColors';
 
 // const drawerWidth = '100vw';
+const padding = 'calc(0.5vh + 0.5vw)';
 
 const useStyles = makeStyles({
   drawer: {
@@ -17,33 +18,26 @@ const useStyles = makeStyles({
     paddingLeft: '10px',
     backgroundColor: (props) => props.yourTurn ? COLORS.game.yourTurn : COLORS.game.opponentTurn,
     transition: 'all 0.5s ease',
-    height: 'calc(10vh + 9vw)',
+    height: 'calc(15vh + 8vw)',
   },
 
   text: {
     color: (props) => props.yourTurn ? 'black' : 'white',
+    marginLeft: '5vw',
     fontSize: '1vw',
-    transition: 'all 0.5s ease',
-  },
-
-  avatar: {
-    width: '200px',
-    height: '200px',
-    background: 'white',
-    borderRadius: 200,
-    border: '5px solid white',
+    transform: 'scale(1.2, 1.9)',
   },
 
   drawerTurnStateText: {
     fontFamily: FONTS.pixel,
     fontSize: '3.5vw',
-    paddingTop: 15,
-    paddingLeft: 20,
+    paddingTop: padding,
+    paddingLeft: padding,
   },
 
   drawerTextInfo: {
     fontFamily: FONTS.pixel,
-    paddingTop: 25,
+    paddingTop: padding,
   },
 
   drawerInfo: {
@@ -55,11 +49,11 @@ const useStyles = makeStyles({
   },
 
   disc: {
-    borderRadius: 100,
-    border: '5px solid white',
+    borderRadius: '100vw',
+    border: 'calc(0.2vw + 0.2vh) solid white',
     width: 'calc(5vh + 5vw)',
     height: 'calc(5vh + 5vw)',
-    margin: 10,
+    margin: padding,
     backgroundColor: (props) => props.discColor,
     transition: 'all 0.5s ease',
   }

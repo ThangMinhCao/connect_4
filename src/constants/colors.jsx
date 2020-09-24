@@ -6,6 +6,8 @@ const COLORS = {
   landing: {
     login: '#CC7E3B',
     loginHover: '#B06E34',
+    signup: '#597444',
+    signupHover: '#4c633c',
   },
 
   room: {

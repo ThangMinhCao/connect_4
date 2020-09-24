@@ -10,35 +10,36 @@ const ROUTES = {
     key: "landing-page",
     path: "/",
     exact: true,
-    component: () => <LandingPage />,
+    component: (props) => <LandingPage {...props} />,
   },
 
   login: {
     key: "login-page",
     path: "/login",
     exact: true,
-    component: () => <LoginPage />,
+    component: (props) => <LoginPage {...props} />,
+    // component: (props) => <LandingPage {...props} />,
   },
 
   room: {
     key: "room-page",
     path: "/room",
     exact: true,
-    component: () => <RoomPage />,
+    component: (props) => <RoomPage {...props} />,
   },
 
   ingame: {
     key: "ingame-page",
     path: "/ingame",
     exact: true,
-    component: () => <IngamePage />,
+    component: (props) => <IngamePage  {...props} />,
   },
 
   user: {
     key: "user-page",
     path: "/user",
     exact: true,
-    component: () => <UserPage />,
+    component: (props) => <UserPage {...props} />,
   },
 }
 

@@ -1,71 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import ROUTES from '../../routes';
-
-import { makeStyles } from '@material-ui/core/styles';
+// import ROUTES from '../../routes';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import '../../constants/colors';
-import COLORS from '../../constants/colors';
-import { Typography } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import HomeIcon from '@material-ui/icons/Home';
+import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
+import loginUseStyles from './LoginPage-styles';
+import { Base64 } from 'js-base64';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
-const useStyles = makeStyles((theme) => ({
-  page: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    height: '100vh',
-    // backgroundColor: COLORS.background,
-  },
+const Labels = {
+  USERNAME: 'Username',
+  PASSWORD: 'Password',
+}
 
-  gameName: {
-    position: 'absolute',
-    top: 10,
-    left: 20,
-    fontFamily: '"Press Start 2P", cursive',
-    fontSize: 'calc(1vw + 2vh)',
-  },
+const AlertTypes = {
+  ERROR: 'error',
+  SUCCESS: 'success',
+}
 
-  headerText: {
-    justifyContent: 'center',
-    fontFamily: '"Press Start 2P", cursive',
-    fontSize: 'calc(5vw + 2vh)',
-  },
-  loginButton: {
-    height: '15vh',
-    width: '35vw',
-    backgroundColor: COLORS.landing.login,
-    '&:hover': {
-      backgroundColor: COLORS.landing.loginHover,
-    },
-  },
+const LoginPage = ({ handleLogin }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loggingIn, setLoggingIng] = useState(true);
 
-  buttonText: {
-    color: 'white',
-    fontFamily: '"Press Start 2P", cursive',
-    fontSize: 'calc(2vw + 1vh)',
-  },
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState(false);
+  const [alertType, setAlertType] = React.useState('success');
 
-  textField: {
-    transform: 'scale(2.2)',
-    width: '14vw',
-  },
-
-  textFieldTextSize: {
-    fontSize: 'calc(1.5vw + 1vh)',
-  },
-}));
-
-const LoginPage = () => {
-  const classes = useStyles();
+  const classes = loginUseStyles();
   const history = useHistory();
 
-  const onButtonClick = (path) => {
-    history.push(path);
+  const showAlert = (type, message) => {
+    setAlertMessage(message);
+    setAlertType(type);
+    setOpenAlert(true);
   }
 
-  const renderTextField = (label, onChangeFunction) => {
+  const handleSubmitLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await server_api.post(ENDPOINTS.login, {
+        username: Base64.encode(username),
+        password: Base64.encode(password),
+      });
+
+      if (response.data.error) {
+        throw response.data.message;
+      }
+      showAlert(AlertTypes.SUCCESS, response.data.message);
+      localStorage.setItem('account_token', response.data.userToken);
+      handleLogin();
+      // history.push('/room');
+      // history.go(0);
+    } catch (error) {
+      showAlert(AlertTypes.ERROR, error);
+    }
+  }
+
+  const handleSubmitSignup = async (event) => {
+    event.preventDefault();
+    // send a post request to signup user
+    try {
+      const response = await server_api.post(ENDPOINTS.signup, {
+        username: Base64.encode(username),
+        password: Base64.encode(password),
+      });
+      if (response.data.error) {
+        throw response.data.message;
+      }
+      showAlert(AlertTypes.SUCCESS, response.data.message);
+    } catch (error) {
+      showAlert(AlertTypes.ERROR, error);
+    }
+  }
+
+  const handleBackHome = () => {
+    history.push('/');
+    handleLogin();
+    history.go(0);
+  }
+
+  const onChangeUsername = (e) => {setUsername(e.target.value)};
+  const onChangePassword = (e) => {setPassword(e.target.value)};
+
+  const handleCloseAlert = (event, reason) => {
+    setOpenAlert(false);
+  };
+
+  const renderTextField = (label, onChangeFunction, value) => {
     return (
       <TextField
         InputProps={{
@@ -80,33 +107,54 @@ const LoginPage = () => {
         }}
         className={classes.textField}
         label={label}
-        type={label === 'Username' ? 'text' : 'password'}
-      >
-
-      </TextField>
+        type={label === Labels.USERNAME ? 'text' : 'password'}
+        value={value}
+        onChange={onChangeFunction}
+        required
+      />
     )
   }
 
   return (
-    <div className={classes.page}>
+    <form onSubmit={loggingIn ? handleSubmitLogin : handleSubmitSignup} className={classes.page}>
       <Typography className={classes.gameName}>
         CONNECT 4
       </Typography>
-
+      <IconButton onClick={handleBackHome} className={classes.homeButton}>
+        <HomeIcon className={classes.homeIcon} />
+      </IconButton>
       <Typography className={classes.headerText}>
         LOGIN
       </Typography>
-      {renderTextField('Username')}
-      {renderTextField('Password')}
+      {renderTextField(Labels.USERNAME, onChangeUsername, username)}
+      {renderTextField(Labels.PASSWORD, onChangePassword, password)}
       <Button
+        type='submit'
         className={classes.loginButton}
-        onClick={() => onButtonClick(ROUTES.login.path)}
+        onClick={() => setLoggingIng(true)}
       >
         <Typography variant="h4" className={classes.buttonText}>
           LOGIN
         </Typography>
       </Button>
-    </div>
+      <Button
+        type='submit'
+        className={classes.signupButton}
+        onClick={() => setLoggingIng(false)}
+      >
+        <Typography variant="h4" className={classes.buttonText}>
+          SIGNUP 
+        </Typography>
+      </Button>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert severity={alertType}>{alertMessage}</Alert>
+      </Snackbar>
+    </form>
   )
 }
 

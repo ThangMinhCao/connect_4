@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,11 +8,16 @@ import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
 import UserDrawer from './UserDrawer';
 import CurrentGameCard from './CurrentGameCard';
-
 import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
 import uuid from 'shortid';
 import DefaultAvatar from '../../assets/default-avatar.jpg';
+
+import io from 'socket.io-client';
+
+let socket;
+
+const ENDPOINT = 'localhost:4000';
 
 const RoomPage = () => {
   // TODO
@@ -21,48 +27,19 @@ const RoomPage = () => {
   const [username, setUsetName] = useState(`ID: ${userID}`);
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
-  const [currentGames, setCurrentGames] = useState([
-    {
-      id: uuid.generate(),
-      opponent: {
-        id: '#opponentid',
-        name: 'Opponent',
-      },
-      yourTurn: true,
-    },
-    {
-      id: uuid.generate(),
-      opponent: {
-        id: '#opponentid',
-        name: 'Opponent',
-      },
-      yourTurn: false,
-    },
-    {
-      id: uuid.generate(),
-      opponent: {
-        id: '#opponentid',
-        name: 'Opponent',
-      },
-      yourTurn: true,
-    },
-    {
-      id: uuid.generate(),
-      opponent: {
-        id: '#opponentid',
-        name: 'Opponent',
-      },
-      yourTurn: false,
-    },
-  ]);
-  const [roomList, setRoomList] = useState([
-    {
-      id: uuid.generate(),
-      name: 'You are mine!',
-      owner: 'owner',
-    },
-  ]);
+  const [currentGames, setCurrentGames] = useState([]);
+  const [roomList, setRoomList] = useState([]);
   const classes = RoomUseStyle();
+
+  useEffect(() => {
+    console.log(JSON.parse(localStorage.getItem('Connect4Account')));
+    return () => {
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   socket = io(ENDPOINT);
+  // })
 
   const renderAppBar = () => {
     return (

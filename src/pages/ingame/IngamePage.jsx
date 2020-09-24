@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+// import queryString from 'query-string';
+import io from 'socket.io-client';
 
 import GameInfoDrawer from './GameInfoDrawer';
 import IngameStyles from './IngamePage-style';
@@ -26,6 +28,10 @@ const IngamePage = () => {
   //     cleanup
   //   }
   // }, [board])
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+  })
 
   useEffect(() => {
     if (board) {
