@@ -69,14 +69,16 @@ const LandingPage = () => {
         CONNECT 4
       </Typography>
 
-      <Button
+      {/* TODO */}
+      {/* <Button
         className={`${classes.button} ${classes.startButton}`}
         onClick={() => onButtonClick(ROUTES.room.path)}
+        // disabled
       >
         <Typography variant="h4" className={classes.buttonText}>
           START AS A GUEST
         </Typography>
-      </Button>
+      </Button> */}
 
       <Button
         className={`${classes.button} ${classes.loginButton}`}

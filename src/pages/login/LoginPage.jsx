@@ -28,9 +28,10 @@ const LoginPage = ({ handleLogin }) => {
   const [password, setPassword] = useState('');
   const [loggingIn, setLoggingIng] = useState(true);
 
-  const [openAlert, setOpenAlert] = React.useState(false);
-  const [alertMessage, setAlertMessage] = React.useState(false);
-  const [alertType, setAlertType] = React.useState('success');
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(false);
+  const [alertType, setAlertType] = useState('success');
+  const [textFieldError, setTextFieldError] = useState(false);
 
   const classes = loginUseStyles();
   const history = useHistory();
@@ -42,40 +43,43 @@ const LoginPage = ({ handleLogin }) => {
   }
 
   const handleSubmitLogin = async (event) => {
-    event.preventDefault();
     try {
+      event.preventDefault();
       const response = await server_api.post(ENDPOINTS.login, {
-        username: Base64.encode(username),
+        username: username,
         password: Base64.encode(password),
       });
 
       if (response.data.error) {
-        throw response.data.message;
+        throw response.data.error;
       }
       showAlert(AlertTypes.SUCCESS, response.data.message);
-      localStorage.setItem('account_token', response.data.userToken);
+      localStorage.setItem('account_token', response.data.token);
+      // console.log(response.data);
       handleLogin();
-      // history.push('/room');
-      // history.go(0);
+      history.push('/room');
+      history.go(0);
     } catch (error) {
       showAlert(AlertTypes.ERROR, error);
+      setTextFieldError(true);
     }
   }
 
   const handleSubmitSignup = async (event) => {
-    event.preventDefault();
     // send a post request to signup user
     try {
+      event.preventDefault();
       const response = await server_api.post(ENDPOINTS.signup, {
-        username: Base64.encode(username),
+        username: username,
         password: Base64.encode(password),
       });
       if (response.data.error) {
-        throw response.data.message;
+        throw response.data.error;
       }
       showAlert(AlertTypes.SUCCESS, response.data.message);
     } catch (error) {
       showAlert(AlertTypes.ERROR, error);
+      setTextFieldError(true);
     }
   }
 
@@ -105,6 +109,7 @@ const LoginPage = ({ handleLogin }) => {
             root: classes.textFieldTextSize
           }
         }}
+        error={textFieldError}
         className={classes.textField}
         label={label}
         type={label === Labels.USERNAME ? 'text' : 'password'}

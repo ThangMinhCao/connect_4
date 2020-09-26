@@ -54,7 +54,7 @@ const loginUseStyles = makeStyles({
   textField: {
     flex: '1 1 5vh',
     transform: 'scale(2.2)',
-    width: '14vw',
+    width: '24vw',
   },
 
   textFieldTextSize: {

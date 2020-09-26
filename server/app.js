@@ -7,6 +7,14 @@ const cors = require('cors');
 const { connectDB, dbURI } = require('./database/mongodb');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server); 
+
+const PORT = 4000;
+
+app.set('socketio', io);
+
+// parse json from request's body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -14,18 +22,13 @@ app.use(cors());
 // database connection
 connectDB();
 
-// app config
-const PORT = process.env.PORT || 4000;
-
-// const io = socketio(sever);
-
 // models
 require('./models/User');
-require('./models/GameRoom');
+require('./models/Game');
 
 // routes
 app.use("/user", require("./routes/userRouter"));
-app.use("/game", require("./routes/gameRoomRouter"));
+app.use("/games", require("./routes/gameRouter"));
 
 // DB config
 mongoose.connect(dbURI, {
@@ -51,6 +54,5 @@ mongoose.connection.on('error', (err) => {
 // });
 
 //listen
-const server = http.createServer(app);
 server.listen(PORT, () => console.log(`Server is running on port: http://localhost:${PORT}/`));
-
+io.listen(server);

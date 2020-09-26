@@ -1,3 +1,3 @@
-const SECRET = 'qwuoigyvzxobn7g34';
+const SECRET = 'connect4-thang-cao-12345';
 
 module.exports = SECRET;

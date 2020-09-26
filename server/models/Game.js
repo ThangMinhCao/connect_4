@@ -1,10 +1,15 @@
 const mongoose = require('mongoose');
-const Mixed = mongoose.Schema.Types.Mixed;
+// const Mixed = mongoose.Schema.Types.Mixed;
 
-const gameRoomSchema = new mongoose.Schema({
+const gameSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+  },
+
+  public: {
+    type: Boolean,
+    default: false, 
   },
   
   id: {
@@ -27,6 +32,7 @@ const gameRoomSchema = new mongoose.Schema({
 
   started: {
     type: Boolean,
+    default: false,
   },
 
   currentPlayer: {
@@ -39,4 +45,4 @@ const gameRoomSchema = new mongoose.Schema({
   }
 });
 
-mongoose.model('GameRoom', gameRoomSchema);
+mongoose.model('Game', gameSchema);

@@ -8,7 +8,6 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
 import FONTS from '../../constants/fonts';
-// import Paper from '@material-ui/core/Paper';
 import COLORS from '../../constants/colors';
 
 const useStyles = makeStyles({
@@ -18,7 +17,7 @@ const useStyles = makeStyles({
   },
 
   roomList: {
-    maxHeight: 'calc(100vh - 310px)',
+    maxHeight: 'calc(100vh - 360px)',
     overflow: 'auto',
   },
 
@@ -166,7 +165,7 @@ const RoomList = ({ roomList }) => {
         />
       </Toolbar>
 
-      <List className={classes.roomList}>
+      <List disablePadding className={classes.roomList}>
         <Divider />
         {renderRoomListItems()}
       </List>

@@ -16,7 +16,9 @@ const COLORS = {
     searchBar: {
       bar: '#81A352',
       searchField: '#8cb05a',
-    }
+    },
+    addButton: '#81A352',
+    addButtonHover: '#6a8742',
   },
 
   gameCard: {

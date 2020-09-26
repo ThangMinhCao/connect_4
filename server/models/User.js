@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    trim: true,
   },
   
   id: {
@@ -11,9 +12,20 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
 
+  online: {
+    type: Boolean,
+    default: false,
+  },
+
+  public: {
+    type: Boolean,
+    default: true,
+  },
+
   password: {
     type: String,
     required: true,
+    trim: true,
   },
 
   gameHistory: [{

@@ -11,7 +11,7 @@ const RoomUseStyles = makeStyles((theme) => ({
   appBar: {
     height: 70,
     backgroundColor: COLORS.startGame,
-    zIndex: theme.zIndex.drawer + 1,
+    // zIndex: theme.zIndex.drawer + 1,
   },
 
   drawer: {
@@ -74,6 +74,7 @@ const RoomUseStyles = makeStyles((theme) => ({
 
   currentGameList: {
     width: 'calc(100vw - 370px)',
+    height: '200px',
     overflow: 'auto',
     background: 'transparent',
   },
@@ -84,7 +85,20 @@ const RoomUseStyles = makeStyles((theme) => ({
 
   item: {
     flex: 0,
-  }
+  },
+
+  addButton: {
+    position: 'fixed',
+    bottom: '2vh',
+    right: '2vh',
+    backgroundColor: 'rgba(129, 163, 82, 0.5)',
+    border: `2px solid ${COLORS.room.addButtonHover}`,
+    '&:hover': {
+      backgroundColor: COLORS.room.addButtonHover,
+      border: `2px solid ${COLORS.room.addButtonHover}`,
+      opacity: 1,
+    }
+  },
 }));
 
 export default RoomUseStyles;

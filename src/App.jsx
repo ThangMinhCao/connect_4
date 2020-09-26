@@ -9,7 +9,7 @@ const App = () => {
   // const [loggedIn, setLoggedIn] = useState(false);
 
   const handleLogin = () => {
-    console.log(localStorage.getItem('account_token'));
+    // console.log(localStorage.getItem('account_token'));
   }
 
   // const printUserID = () => {

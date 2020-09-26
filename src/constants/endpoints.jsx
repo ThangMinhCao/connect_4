@@ -1,7 +1,8 @@
 const ENDPOINTS = {
   signup: '/user/signup',
   login: '/user/login',
-  createRoom: '/game/create',
+  createRoom: '/games/create',
+  getRoomList: '/games',
 }
 
 export default ENDPOINTS;

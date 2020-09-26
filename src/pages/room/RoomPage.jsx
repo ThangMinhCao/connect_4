@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import UserDrawer from './UserDrawer';
 import CurrentGameCard from './CurrentGameCard';
 import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
+import CreateRoomDialog from './CreateRoomDialog';
 import uuid from 'shortid';
 import DefaultAvatar from '../../assets/default-avatar.jpg';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-let socket;
+// let socket;
 
-const ENDPOINT = 'localhost:4000';
+// const ENDPOINT = 'localhost:4000';
 
 const RoomPage = () => {
   // TODO
@@ -27,14 +32,49 @@ const RoomPage = () => {
   const [username, setUsetName] = useState(`ID: ${userID}`);
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
-  const [currentGames, setCurrentGames] = useState([]);
-  const [roomList, setRoomList] = useState([]);
+  const [dialogOpened, setDialogOpened] = useState(false);
+  const [currentGames, setCurrentGames] = useState([
+    {
+      id: 12345,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: false,
+    },
+    {
+      id: 1234567,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
+    {
+      id: 1234568,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
+    {
+      id: 123456,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
+  ]);
+  const [roomList, setRoomList] = useState([
+  ]);
   const classes = RoomUseStyle();
 
+  const history = useHistory();
+
   useEffect(() => {
-    console.log(JSON.parse(localStorage.getItem('Connect4Account')));
-    return () => {
+    const getAllGames = async () => {
+      try {
+        const response = await server_api.get(ENDPOINTS.getRoomList);
+        setRoomList(response.data.games)
+      } catch (err) {
+        console.log('An error occurs: ', err);
+      }
     }
+    getAllGames();
   }, [])
 
   // useEffect(() => {
@@ -91,6 +131,17 @@ const RoomPage = () => {
         <div className={classes.content}>
           {renderCurrentGames()}
           <RoomList roomList={roomList}/>
+          <Fab
+            className={classes.addButton}
+            onClick={() => setDialogOpened(true)}
+          >
+            <AddIcon style={{ color: 'white' }} />
+          </Fab>
+          <CreateRoomDialog
+            open={dialogOpened}
+            handleClose={() => setDialogOpened(false)}
+            handleOpen={() => setDialogOpened(true)}
+          />
         </div>
       </div>
     </div>
