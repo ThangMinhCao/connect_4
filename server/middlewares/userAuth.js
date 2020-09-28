@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const SECRET = require('../constants/secret');
 
 const verifyToken = (request, response, next) => {
-  const token = request.body.headers.token
+  const token = request.headers.token
   if (!token) {
     return response.status(403).json({
       message: "Missing token!",
@@ -15,6 +15,7 @@ const verifyToken = (request, response, next) => {
       });
     };
     request.userID = decodedToken.id;
+    request.username = decodedToken.username;
     next();
   });
 };

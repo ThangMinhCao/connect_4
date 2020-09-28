@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const {Base64} = require('js-base64');
+const { Base64 } = require('js-base64');
 const jwt = require('jsonwebtoken');
 const SECRET = require('../../constants/secret');
 const uuid = require('shortid');
@@ -46,7 +46,6 @@ const login = async (request, response) => {
       throw 'Username does not exist.';
     };
 
-    console.log(request.query);
     const user = await User.findOne({
       username: username,
       password: Base64.decode(password),
@@ -56,7 +55,7 @@ const login = async (request, response) => {
       throw 'Username and password does not match.';
     };
 
-    const token = jwt.sign({ id: user.id }, SECRET);
+    const token = jwt.sign({ id: user.id, username }, SECRET);
     response.json({
       message: `${username} logged in successfully!`,
       username,
@@ -71,18 +70,30 @@ const login = async (request, response) => {
   }
 }
 
-const getAllUsers = async(request, response) => {
+const getAllUsers = async (request, response) => {
   try {
     const users = (await User.find()).filter((user) => user.public);
     response.json({
       users,
-    }) 
+    })
   } catch (err) {
-    response.status(400).send(err)
-  } 
-} 
+    response.status(400).send(err);
+  }
+}
+
+const getUserFromToken = (request, response) => {
+  try {
+    response.json({
+      username: request.username,
+      id: request.userID,
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
 
 module.exports = {
   signup,
-  login
+  login,
+  getUserFromToken,
 }

@@ -30,7 +30,7 @@ const IngamePage = () => {
   // }, [board])
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    // socket = io(ENDPOINT);
   })
 
   useEffect(() => {

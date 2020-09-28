@@ -6,23 +6,26 @@ import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
 
 const useStyles = makeStyles({
   room: {
-    display: 'flex',
-    flexDirection: 'row',
   },
 
   roomList: {
-    maxHeight: 'calc(100vh - 360px)',
+    // maxHeight: 'calc(100vh - 360px)',
     overflow: 'auto',
   },
 
   roomName: {
     flex: 1,
+    minWidth: 300,
+    wordWrap: 'break-word',
+    overflow: 'hidden',
   },
 
   toolbar: {
@@ -73,6 +76,14 @@ const useStyles = makeStyles({
     marginRight: 10,
     textDecoration: 'underline',
     color: '#09814A',
+  },
+
+  roomID: {
+    minWidth: 150,
+  },
+
+  ownerValue: {
+
   }
 });
 
@@ -83,6 +94,27 @@ const RoomList = ({ roomList }) => {
   // TODO
   // const handleChooseRoom = (roomID) => {
   // }
+
+  const joinRoom = async (gameID) => {
+    try {
+      const response = await server_api.patch(ENDPOINTS.joinGame, 
+        {
+          params: {
+            gameID,
+          }
+        },
+        {
+          headers: {
+            token: localStorage.getItem('account_token'),
+          }
+        }
+      );
+
+      console.log(response.data.message);
+    } catch (err) {
+      console.log('An error occurs: ', err);  
+    }
+  }
 
   const generateNameDivider = () => {
     return (
@@ -118,7 +150,9 @@ const RoomList = ({ roomList }) => {
           <div key={room.id}>
             <ListItem
               button
+              className={classes.room}
               // TODO onClick={() => console.log(123123)}
+              onClick={() => joinRoom(room.id)}
             >
               <p className={classes.roomNameTag}>
                 Name: 
@@ -137,7 +171,7 @@ const RoomList = ({ roomList }) => {
               <p className={classes.ownerTag}>
                 Owner: 
               </p>
-              <p>
+              <p className={classes.ownerValue}>
                 {room.owner}
               </p>
             </ListItem>

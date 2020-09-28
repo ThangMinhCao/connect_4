@@ -14,6 +14,10 @@ import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
 const dialogUseStyles = makeStyles((theme) => ({
+  dialog: {
+    position: 'fixed'
+  },
+
   text: {
     fontFamily: FONTS.pixel,
   },
@@ -34,17 +38,21 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
   const handleSubmitCreateRoom = async (event) => {
     event.preventDefault(); 
     try {
-      const response = await server_api.post(ENDPOINTS.createRoom, {
-        headers: {
-          token: localStorage.getItem('account_token'),
+      await server_api.post(ENDPOINTS.createRoom, 
+        {
+          params: {
+            name,
+            public: isPublic,
+          }
         },
-        params: {
-          name,
-          public: isPublic,
+        {
+          headers: {
+            token: localStorage.getItem('account_token'),
+          }
         }
-      });
-    } catch (error) {
-      console.log('An error occurs: ', error);  
+      );
+    } catch (err) {
+      console.log('An error occurs: ', err);  
     }
     setPublic(false);
     setName('');
@@ -53,6 +61,7 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
 
   return (
       <Dialog
+        className={classes.dialog}
         open={open}
         maxWidth='sm'
         fullWidth

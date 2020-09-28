@@ -13,7 +13,6 @@ import CurrentGameCard from './CurrentGameCard';
 import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
 import CreateRoomDialog from './CreateRoomDialog';
-import uuid from 'shortid';
 import DefaultAvatar from '../../assets/default-avatar.jpg';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
@@ -24,57 +23,67 @@ import ENDPOINTS from '../../constants/endpoints';
 
 // const ENDPOINT = 'localhost:4000';
 
-const RoomPage = () => {
+const RoomPage = ({ socket, userID, username }) => {
   // TODO
   /* eslint-disable */
   const [avatar, setAvatar] = useState(DefaultAvatar);
-  const [userID, setUserID] = useState(uuid.generate());
-  const [username, setUsetName] = useState(`ID: ${userID}`);
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
   const [currentGames, setCurrentGames] = useState([
-    {
-      id: 12345,
-      opponentName: 'opponent 1',
-      opponentID: 'opponent id',
-      yourTurn: false,
-    },
-    {
-      id: 1234567,
-      opponentName: 'opponent 1',
-      opponentID: 'opponent id',
-      yourTurn: true,
-    },
-    {
-      id: 1234568,
-      opponentName: 'opponent 1',
-      opponentID: 'opponent id',
-      yourTurn: true,
-    },
-    {
-      id: 123456,
-      opponentName: 'opponent 1',
-      opponentID: 'opponent id',
-      yourTurn: true,
-    },
+    // {
+    //   id: 12345,
+    //   opponentName: 'opponent 1',
+    //   opponentID: 'opponent id',
+    //   yourTurn: false,
+    // },
+    // {
+    //   id: 1234567,
+    //   opponentName: 'opponent 1',
+    //   opponentID: 'opponent id',
+    //   yourTurn: true,
+    // },
+    // {
+    //   id: 1234568,
+    //   opponentName: 'opponent 1',
+    //   opponentID: 'opponent id',
+    //   yourTurn: true,
+    // },
+    // {
+    //   id: 123456,
+    //   opponentName: 'opponent 1',
+    //   opponentID: 'opponent id',
+    //   yourTurn: true,
+    // },
   ]);
-  const [roomList, setRoomList] = useState([
-  ]);
+  const [roomList, setRoomList] = useState([]);
   const classes = RoomUseStyle();
 
   const history = useHistory();
 
   useEffect(() => {
+    if (!localStorage.getItem('account_token')) {
+      history.push('/login');
+    }
+  }, [history])
+
+  useEffect(() => {
     const getAllGames = async () => {
       try {
         const response = await server_api.get(ENDPOINTS.getRoomList);
-        setRoomList(response.data.games)
+        // setRoomList(response.data.games)
       } catch (err) {
         console.log('An error occurs: ', err);
       }
     }
     getAllGames();
+
+    socket.on('allGames', (data) => {
+      setRoomList(data)
+    });
+    return () => {
+      socket.removeAllListeners('allGames');
+    }
   }, [])
 
   // useEffect(() => {

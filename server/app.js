@@ -8,7 +8,7 @@ const { connectDB, dbURI } = require('./database/mongodb');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server); 
+const io = socketio(server, { transports: ['polling'] }); 
 
 const PORT = 4000;
 
@@ -45,13 +45,13 @@ mongoose.connection.on('error', (err) => {
   console.log('Error occurs when connecting to MongoDB: ', err);
 });
 
-// io.on('connection', (socket) => {
-//   console.log('New connection occurs!');
+io.on('connection', (socket) => {
+  console.log('New connection occurs!');
 
-//   socket.on('disconnect', () => {
-//     console.log('User left!');
-//   })
-// });
+  socket.on('disconnect', () => {
+    console.log('User left!');
+  })
+});
 
 //listen
 server.listen(PORT, () => console.log(`Server is running on port: http://localhost:${PORT}/`));

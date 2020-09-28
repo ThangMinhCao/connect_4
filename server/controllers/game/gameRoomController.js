@@ -20,9 +20,15 @@ const createNewRoom = async (request, response) => {
       id: uuid.generate(),
       owner: foundUser.username,
       password: !password ? undefined : password,
-      players: [creatorID]
+      players: {
+        player1: foundUser.username,
+        player2: '',
+      } 
     });
     await gameRoom.save();
+
+    const games = await Game.find();
+    request.app.get('socketio').emit('allGames', games);
     response.json({
       message: `Room: '${name}' was created successfully!`
     });
@@ -37,12 +43,37 @@ const getAllGames = async (request, response) => {
     response.json({
       games
     })
+    request.app.get('socketio').emit('allGames', games);
+    // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
     response.status(400).send(err);
   }
 };
 
+const joinGame = async (request, response) => {
+  try {
+    const { gameID } = request.body.params;
+    const game = await Game.findOne({ id: gameID });
+    if (!game) throw 'Game not available!';
+    // if (Game.find({ players: request.userID })) throw 'You are already in this room';
+
+    if (game.players.length === 2) throw 'Game slots are full!';
+    Game.findByIdAndUpdate(game._id, { $set: {
+      'players.player2': request.userID,
+    }})
+
+    response.json({
+      message: 'Join game successfully!',
+    })
+    // request.app.get('socketio').emit('allGames', games);
+    // request.app.get('socketio').broadcast.emit('allGames', games);
+  } catch (err) {
+    response.status(404).send(err);
+  }
+}
+
 module.exports = {
   createNewRoom,
   getAllGames,
+  joinGame,
 };

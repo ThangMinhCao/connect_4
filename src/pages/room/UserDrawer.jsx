@@ -26,6 +26,10 @@ const UserDrawer = ({
         {username} 
       </Typography>
 
+      <Typography className={classes.drawerUserName}>
+        ID: {userID} 
+      </Typography>
+
       <Typography variant='h5' className={classes.drawerInfo}>
         Wins: {victoryNumber} 
       </Typography>

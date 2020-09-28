@@ -22,9 +22,10 @@ const gameSchema = new mongoose.Schema({
     required: true,
   },
 
-  players: [{
-    type: String,
-  }],
+  players: {
+    player1: String,
+    player2: String,
+  },
 
   password: {
     type: String,

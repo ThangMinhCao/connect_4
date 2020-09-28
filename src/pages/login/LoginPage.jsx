@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 // import ROUTES from '../../routes';
 import TextField from '@material-ui/core/TextField';
@@ -36,6 +36,12 @@ const LoginPage = ({ handleLogin }) => {
   const classes = loginUseStyles();
   const history = useHistory();
 
+  useEffect(() => {
+    if (localStorage.getItem('account_token')) {
+      history.push('/room');
+    }
+  }, [history])
+
   const showAlert = (type, message) => {
     setAlertMessage(message);
     setAlertType(type);
@@ -55,12 +61,10 @@ const LoginPage = ({ handleLogin }) => {
       }
       showAlert(AlertTypes.SUCCESS, response.data.message);
       localStorage.setItem('account_token', response.data.token);
-      // console.log(response.data);
       handleLogin();
       history.push('/room');
-      history.go(0);
     } catch (error) {
-      showAlert(AlertTypes.ERROR, error);
+      showAlert(AlertTypes.ERROR, error.message);
       setTextFieldError(true);
     }
   }
@@ -70,7 +74,7 @@ const LoginPage = ({ handleLogin }) => {
     try {
       event.preventDefault();
       const response = await server_api.post(ENDPOINTS.signup, {
-        username: username,
+        username,
         password: Base64.encode(password),
       });
       if (response.data.error) {
@@ -85,7 +89,7 @@ const LoginPage = ({ handleLogin }) => {
 
   const handleBackHome = () => {
     history.push('/');
-    handleLogin();
+    // handleLogin();
     history.go(0);
   }
 

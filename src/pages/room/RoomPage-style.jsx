@@ -48,6 +48,7 @@ const RoomUseStyles = makeStyles((theme) => ({
     fontFamily: FONTS.pixel,
     paddingTop: 25,
     color: 'white',
+    borderBottom: '5px solid'
   },
 
   body: {
@@ -59,7 +60,7 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   content: {
-    width: '100%',
+    width: 'calc(100vw - 385px)',
   },
 
   card: {
@@ -73,7 +74,6 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   currentGameList: {
-    width: 'calc(100vw - 370px)',
     height: '200px',
     overflow: 'auto',
     background: 'transparent',
