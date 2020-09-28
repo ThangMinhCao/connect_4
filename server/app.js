@@ -27,7 +27,7 @@ require('./models/User');
 require('./models/Game');
 
 // routes
-app.use("/user", require("./routes/userRouter"));
+app.use("/users", require("./routes/userRouter"));
 app.use("/games", require("./routes/gameRouter"));
 
 // DB config

@@ -9,8 +9,10 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   appBar: {
+    display: 'flex',
     height: 70,
     backgroundColor: COLORS.startGame,
+    justifyContent: 'center',
     // zIndex: theme.zIndex.drawer + 1,
   },
 
@@ -23,32 +25,10 @@ const RoomUseStyles = makeStyles((theme) => ({
     fontFamily: FONTS.pixel,
   },
 
-  drawerPaper: {
-    width: 350,
-    paddingTop: 50,
-    alignItems: 'center',
-    backgroundColor: COLORS.room.drawer,
-  },
-
-  avatar: {
-    width: '200px',
-    height: '200px',
-    background: 'white',
-    borderRadius: 200,
-    border: '5px solid white',
-  },
-
-  drawerUserName: {
-    fontFamily: FONTS.pixel,
-    paddingTop: 15,
-    color: 'white',
-  },
-
-  drawerInfo: {
-    fontFamily: FONTS.pixel,
-    paddingTop: 25,
-    color: 'white',
-    borderBottom: '5px solid'
+  gameText:{
+    flex: 1,
+    fontSize: 25,
+    textAlign: 'center'
   },
 
   body: {
@@ -60,7 +40,7 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   content: {
-    width: 'calc(100vw - 385px)',
+    width: 'calc(100vw - 20px)',
   },
 
   card: {

@@ -1,11 +1,12 @@
 const ENDPOINTS = {
   index: 'http://localhost:4000/',
-  signup: '/user/signup',
-  login: '/user/login',
+  signup: '/users/signup',
+  login: '/users/login',
   createRoom: '/games/create',
   getRoomList: '/games',
-  verifyUser: '/user/verifyUser',
+  verifyUser: '/users/verifyUser',
   joinGame: '/games/join',
+  getAllUsers: '/users'
 }
 
 export default ENDPOINTS;

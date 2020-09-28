@@ -5,7 +5,7 @@ const uuid = require('shortid');
 
 const createNewRoom = async (request, response) => {
   try {
-    const { name, password } = request.body.params;
+    const { name, public, password } = request.body.params;
 
     const creatorID = request.userID;
     if (!creatorID) throw "Missing creator's id.";
@@ -15,25 +15,24 @@ const createNewRoom = async (request, response) => {
       throw "Creator's ID not available.";
     };
 
+    const roomID = uuid.generate();
     const gameRoom = new Game({
       name: !name ? 'Empty name' : name,
-      id: uuid.generate(),
-      owner: foundUser.username,
+      id: roomID,
+      owner: { ownerID: creatorID, ownerName: request.username },
       password: !password ? undefined : password,
-      players: {
-        player1: foundUser.username,
-        player2: '',
-      } 
+      players: [creatorID],
+      currentGames: [roomID],
+      public
     });
     await gameRoom.save();
-
     const games = await Game.find();
     request.app.get('socketio').emit('allGames', games);
     response.json({
       message: `Room: '${name}' was created successfully!`
     });
   } catch (err) {
-    response.status(401).send(err);
+    response.status(400).send(err);
   }
 };
 
@@ -55,20 +54,24 @@ const joinGame = async (request, response) => {
     const { gameID } = request.body.params;
     const game = await Game.findOne({ id: gameID });
     if (!game) throw 'Game not available!';
-    // if (Game.find({ players: request.userID })) throw 'You are already in this room';
+    if (game.players.includes(request.userID)) throw 'You are already in this room';
 
     if (game.players.length === 2) throw 'Game slots are full!';
-    Game.findByIdAndUpdate(game._id, { $set: {
-      'players.player2': request.userID,
+    await Game.findOneAndUpdate({ _id: game._id }, { "$push": {
+      "players": request.userID,
+    }})
+
+    await User.findOneAndUpdate({ id: request.userID }, { "$push": {
+      "currentGames": gameID,
     }})
 
     response.json({
       message: 'Join game successfully!',
     })
-    // request.app.get('socketio').emit('allGames', games);
+    request.app.get('socketio').emit('allGames', games);
     // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
-    response.status(404).send(err);
+    response.status(400).send(err);
   }
 }
 

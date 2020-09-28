@@ -64,7 +64,8 @@ const LoginPage = ({ handleLogin }) => {
       handleLogin();
       history.push('/room');
     } catch (error) {
-      showAlert(AlertTypes.ERROR, error.message);
+      console.log(error);
+      showAlert(AlertTypes.ERROR, error);
       setTextFieldError(true);
     }
   }

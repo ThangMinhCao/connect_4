@@ -68,12 +68,12 @@ const App = () => {
           exact={ROUTES.ingame.exact}
           component={ROUTES.ingame.component}
         />
-        <Route
+        {/* <Route
           key={ROUTES.user.key}
           path={ROUTES.user.path}
           exact={ROUTES.user.exact}
           component={ROUTES.user.component}
-        />
+        /> */}
       </Switch>
     </Router>
   );

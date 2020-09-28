@@ -6,6 +6,9 @@ import Divider from '@material-ui/core/Divider';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import Tooltip from '@material-ui/core/Tooltip';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
@@ -17,20 +20,19 @@ const useStyles = makeStyles({
   },
 
   roomList: {
-    // maxHeight: 'calc(100vh - 360px)',
     overflow: 'auto',
+    height: 'calc(100vh - 360px)',
   },
 
   roomName: {
     flex: 1,
-    minWidth: 300,
+    minWidth: 200,
     wordWrap: 'break-word',
     overflow: 'hidden',
   },
 
   toolbar: {
     color: 'white',
-    // backgroundColor: '#156CA2',
     backgroundColor: COLORS.room.searchBar.bar,
   },
 
@@ -40,7 +42,6 @@ const useStyles = makeStyles({
     paddingLeft: 15,
     borderRadius: 7,
     color: 'white',
-    // backgroundColor: '#1479B8',
     backgroundColor: COLORS.room.searchBar.searchField,
   },
 
@@ -68,6 +69,7 @@ const useStyles = makeStyles({
 
   roomNameTag: {
     marginRight: 10,
+    marginLeft: 10,
     textDecoration: 'underline',
     color: '#DF2935',
   },
@@ -87,13 +89,23 @@ const useStyles = makeStyles({
   }
 });
 
-const RoomList = ({ roomList }) => {
+const RoomList = ({ roomList, userID }) => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState('');
 
   // TODO
   // const handleChooseRoom = (roomID) => {
   // }
+  const generateTooltips = (room) => {
+    if (room.players.includes(userID)) {
+      return { title: 'You\'re already in this room.', buttonDisabled: true };
+    } else if (room.players.length === 2) {
+      return { title: 'Room full', buttonDisabled: true };
+    } else if (room.started) {
+      return { title: 'This room is started', buttonDisabled: true };
+    }
+    return { title: 'Join this room', buttonDisabled: false };
+  }
 
   const joinRoom = async (gameID) => {
     try {
@@ -109,10 +121,11 @@ const RoomList = ({ roomList }) => {
           }
         }
       );
+      console.log(roomList);
 
       console.log(response.data.message);
     } catch (err) {
-      console.log('An error occurs: ', err);  
+      console.log('Error: ', err.response.data);  
     }
   }
 
@@ -140,7 +153,7 @@ const RoomList = ({ roomList }) => {
           if (searchTerm) {
             return (
               room.name.includes(searchTerm)
-              || room.owner.includes(searchTerm)
+              || room.owner.ownerName.includes(searchTerm)
               || room.id.includes(searchTerm)
             );
           }
@@ -149,11 +162,26 @@ const RoomList = ({ roomList }) => {
         .map((room, index) => (
           <div key={room.id}>
             <ListItem
-              button
+              // button
               className={classes.room}
               // TODO onClick={() => console.log(123123)}
-              onClick={() => joinRoom(room.id)}
+              // onClick={() => joinRoom(room.id)}
             >
+              <Tooltip
+                placement="top"
+                title={generateTooltips(room).title}
+              >
+                <span>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={generateTooltips(room).buttonDisabled}
+                    onClick={() => joinRoom(room.id)}
+                  >
+                    <ArrowForwardIcon />
+                  </Button> 
+                </span>
+              </Tooltip>
               <p className={classes.roomNameTag}>
                 Name: 
               </p>
@@ -162,7 +190,7 @@ const RoomList = ({ roomList }) => {
               </p>
               {generateNameDivider()}
               <p className={classes.idTag}>
-                ID: 
+                RoomID: 
               </p>
               <p className={classes.roomID}>
                 {room.id}
@@ -172,7 +200,7 @@ const RoomList = ({ roomList }) => {
                 Owner: 
               </p>
               <p className={classes.ownerValue}>
-                {room.owner}
+                {room.owner.ownerName}
               </p>
             </ListItem>
             <Divider />

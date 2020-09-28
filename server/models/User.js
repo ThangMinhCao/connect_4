@@ -33,18 +33,10 @@ const userSchema = new mongoose.Schema({
     type: String,
   }],
 
-  currentGames: [{
-    // array of room id
-    type: String,
-  }],
+  currentGames: [String],
 
-  friends: [{
-    // array of user id
-    type: String,
-  }],
-},
-{
-  timestamps: true,
+  // array of user id
+  friends: [String],
 });
 
 mongoose.model('User', userSchema);

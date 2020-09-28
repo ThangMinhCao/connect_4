@@ -73,9 +73,10 @@ const login = async (request, response) => {
 const getAllUsers = async (request, response) => {
   try {
     const users = (await User.find()).filter((user) => user.public);
-    response.json({
-      users,
-    })
+    request.app.get('socketio').emit('allUsers', users);
+    // response.json({
+    //   users,
+    // })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -95,5 +96,6 @@ const getUserFromToken = (request, response) => {
 module.exports = {
   signup,
   login,
+  getAllUsers,
   getUserFromToken,
 }

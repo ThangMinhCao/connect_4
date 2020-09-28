@@ -12,7 +12,6 @@ const getBoard = async (request, response) => {
       throw 'Board not available.';
     }
 
-
     request.app.get('socketio').emit('allGames', games);
     // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {

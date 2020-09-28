@@ -36,6 +36,13 @@ const COLORS = {
     youWin: '#597444',
     youLose: '#393424',
     tie: '#FFC857',
+  },
+
+  historyGame: {
+    win: '#7FB069', 
+    winHover: '#6CA054',
+    lose: '#D36135',
+    loseHover: '#B85128',
   }
 }
 

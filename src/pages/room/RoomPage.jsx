@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+
 import UserDrawer from './UserDrawer';
 import CurrentGameCard from './CurrentGameCard';
 import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
+import RoomAppBar from './RoomAppBar'; 
 import CreateRoomDialog from './CreateRoomDialog';
-import DefaultAvatar from '../../assets/default-avatar.jpg';
+import UserInfoDialog from './UserInfoDialog';
+// import DefaultAvatar from '../../assets/default-avatar.jpg';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
@@ -26,37 +26,41 @@ import ENDPOINTS from '../../constants/endpoints';
 const RoomPage = ({ socket, userID, username }) => {
   // TODO
   /* eslint-disable */
-  const [avatar, setAvatar] = useState(DefaultAvatar);
+  // const [avatar, setAvatar] = useState(DefaultAvatar);
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
+  const [chosenUser, setChosenUser] = useState({});
   const [currentGames, setCurrentGames] = useState([
-    // {
-    //   id: 12345,
-    //   opponentName: 'opponent 1',
-    //   opponentID: 'opponent id',
-    //   yourTurn: false,
-    // },
-    // {
-    //   id: 1234567,
-    //   opponentName: 'opponent 1',
-    //   opponentID: 'opponent id',
-    //   yourTurn: true,
-    // },
-    // {
-    //   id: 1234568,
-    //   opponentName: 'opponent 1',
-    //   opponentID: 'opponent id',
-    //   yourTurn: true,
-    // },
-    // {
-    //   id: 123456,
-    //   opponentName: 'opponent 1',
-    //   opponentID: 'opponent id',
-    //   yourTurn: true,
-    // },
+    {
+      id: 12345,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: false,
+    },
+    {
+      id: 1234567,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
+    {
+      id: 1234568,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
+    {
+      id: 123456,
+      opponentName: 'opponent 1',
+      opponentID: 'opponent id',
+      yourTurn: true,
+    },
   ]);
   const [roomList, setRoomList] = useState([]);
+  const [drawerOpened, setDrawerOpened] = useState(false);
+  const [allPublicUsers, setAllPublicUsers] = useState([]);
+  const userDialogRef = useRef();
   const classes = RoomUseStyle();
 
   const history = useHistory();
@@ -70,37 +74,34 @@ const RoomPage = ({ socket, userID, username }) => {
   useEffect(() => {
     const getAllGames = async () => {
       try {
-        const response = await server_api.get(ENDPOINTS.getRoomList);
+        await server_api.get(ENDPOINTS.getRoomList);
         // setRoomList(response.data.games)
       } catch (err) {
         console.log('An error occurs: ', err);
       }
     }
+    const getAllUsers = async() => {
+      try {
+        await server_api.get(ENDPOINTS.getAllUsers);
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getAllUsers();
     getAllGames();
+
+    socket.on('allUsers', (data) => {
+      setAllPublicUsers(data)
+    });
 
     socket.on('allGames', (data) => {
       setRoomList(data)
     });
     return () => {
       socket.removeAllListeners('allGames');
+      socket.removeAllListeners('allUsers');
     }
   }, [])
-
-  // useEffect(() => {
-  //   socket = io(ENDPOINT);
-  // })
-
-  const renderAppBar = () => {
-    return (
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <Typography>
-
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    )
-  } 
 
   const renderCurrentGames = () => {
     return (
@@ -127,19 +128,29 @@ const RoomPage = ({ socket, userID, username }) => {
 
   return (
     <div className={classes.page}>
-      {renderAppBar()}
+      {/* {renderAppBar()} */}
+      <RoomAppBar
+        allPublicUsers={allPublicUsers}
+        socket={socket}
+        setDrawerOpened={setDrawerOpened}
+        userDialogRef={userDialogRef}
+        setChosenUser={setChosenUser}
+      />
       <div className={classes.body}>
         <UserDrawer
-          avatar={avatar}
+          // avatar={avatar}
           userID={userID}
           username={username}
           victoryNumber={victoryNumber}
           loseNumber={loseNumber}
           currentGamesNumber={currentGames.length}
+          open={drawerOpened}
+          setOpen={setDrawerOpened}
+          className={classes.drawer}
         />
         <div className={classes.content}>
           {renderCurrentGames()}
-          <RoomList roomList={roomList}/>
+          <RoomList roomList={roomList} userID={userID} />
           <Fab
             className={classes.addButton}
             onClick={() => setDialogOpened(true)}
@@ -153,6 +164,7 @@ const RoomPage = ({ socket, userID, username }) => {
           />
         </div>
       </div>
+      <UserInfoDialog ref={userDialogRef} user={chosenUser} />
     </div>
   )
 }

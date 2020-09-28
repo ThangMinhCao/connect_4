@@ -32,7 +32,7 @@ const dialogUseStyles = makeStyles((theme) => ({
 
 const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
   const classes = dialogUseStyles();
-  const [isPublic, setPublic] = useState(false);
+  const [isPublic, setPublic] = useState(true);
   const [name, setName] = useState('');
 
   const handleSubmitCreateRoom = async (event) => {
@@ -54,7 +54,7 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
     } catch (err) {
       console.log('An error occurs: ', err);  
     }
-    setPublic(false);
+    setPublic(true);
     setName('');
     handleClose();
   }
@@ -103,6 +103,7 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
                     <Switch
                       color="primary"
                       value={isPublic}
+                      defaultChecked
                       onChange={() => setPublic(!isPublic)}
                     />
                   }

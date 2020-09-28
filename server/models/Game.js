@@ -18,14 +18,14 @@ const gameSchema = new mongoose.Schema({
   },
 
   owner: {
-    type: String,
+    type: {
+      ownerName: String,
+      ownerID: String,
+    },
     required: true,
   },
 
-  players: {
-    player1: String,
-    player2: String,
-  },
+  players: [String],
 
   password: {
     type: String,
