@@ -88,9 +88,9 @@ const IngamePage = () => {
     setBoard(board);
   }, [])
 
-  const handleClick = () => {
-    setYourTurn(!yourTurn);
-  }
+  // const handleClick = () => {
+  //   setYourTurn(!yourTurn);
+  // }
 
   return (
     <div className={classes.page}>

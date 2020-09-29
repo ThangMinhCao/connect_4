@@ -9,10 +9,11 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   appBar: {
-    display: 'flex',
-    height: 70,
+    // display: 'flex',
+    height: 75,
     backgroundColor: COLORS.startGame,
-    justifyContent: 'center',
+    // justifyContent: 'left',
+    alignItems: 'center',
     // zIndex: theme.zIndex.drawer + 1,
   },
 

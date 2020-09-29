@@ -20,10 +20,10 @@ const DrawerUseStyle = makeStyles({
   },
 
   avatar: {
-    width: '200px',
-    height: '200px',
-    fontSize: 90,
-    borderRadius: 200,
+    width: '150px',
+    height: '150px',
+    fontSize: 80,
+    borderRadius: 2000,
     border: '5px solid white',
   },
 
@@ -42,9 +42,16 @@ const DrawerUseStyle = makeStyles({
 
   drawerCloseButton: {
     position: 'absolute',
-    left: 260,
+    left: 290,
     top: 10,
   },
+
+  gameName: {
+    position: 'absolute',
+    top: 30,
+    fontFamily: FONTS.pixel,
+    color: 'white',
+  }
 });
 
 const UserDrawer = ({
@@ -60,6 +67,9 @@ const UserDrawer = ({
       anchor='left'
       open={open}
     >
+      <Typography className={classes.gameName}>
+        Connect 4
+      </Typography>
       <IconButton
         className={classes.drawerCloseButton}
         onClick={() => setOpen(false)}

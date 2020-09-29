@@ -86,12 +86,12 @@ const GameInfoDrawer = ({
       </div>
       <div className={classes.drawerInfo}>
         <Typography variant="h5" className={`${classes.text} ${classes.drawerTextInfo}`}>
-          Loses: {0} 
+          Turns played: {0} 
         </Typography>
-
+{/* 
         <Typography variant="h5" className={`${classes.text} ${classes.drawerTextInfo}`}>
           Current: {0} 
-        </Typography>
+        </Typography> */}
       </div>
     </div>
   )

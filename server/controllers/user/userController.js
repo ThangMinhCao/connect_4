@@ -82,6 +82,22 @@ const getAllUsers = async (request, response) => {
   }
 }
 
+const getFriendList = async (request, response) => {
+  try {
+    const userID = request.userID;
+    const friendIDList = await User.findOne({ id: userID }).friends;
+    const friendList = await User.find({
+      'id': { "$in": friendIDList }
+    });
+    request.app.get('socketio').to(request.app.get('socketID')).emit('friendList', friendList);
+    // response.json({
+    //   users,
+    // })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
 const getUserFromToken = (request, response) => {
   try {
     response.json({
@@ -98,4 +114,5 @@ module.exports = {
   login,
   getAllUsers,
   getUserFromToken,
+  getFriendList,
 }

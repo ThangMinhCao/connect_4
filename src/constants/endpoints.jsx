@@ -6,7 +6,8 @@ const ENDPOINTS = {
   getRoomList: '/games',
   verifyUser: '/users/verifyUser',
   joinGame: '/games/join',
-  getAllUsers: '/users'
+  getAllUsers: '/users',
+  getFriendList: '/users/friendList',
 }
 
 export default ENDPOINTS;

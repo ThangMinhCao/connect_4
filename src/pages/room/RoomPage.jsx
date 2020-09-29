@@ -66,9 +66,9 @@ const RoomPage = ({ socket, userID, username }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!localStorage.getItem('account_token')) {
-      history.push('/login');
-    }
+    // if (!localStorage.getItem('account_token')) {
+    //   history.push('/login');
+    // }
   }, [history])
 
   useEffect(() => {

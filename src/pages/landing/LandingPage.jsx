@@ -56,7 +56,9 @@ const LandingPage = () => {
 
   const onButtonClick = (path) => {
     history.push({
-      pathname: path,
+      pathname: localStorage.getItem('account_token')
+        ? ROUTES.room.path
+        : ROUTES.login.path,
       state: {
         userID: uuid.generate(),
       }
@@ -81,11 +83,11 @@ const LandingPage = () => {
       </Button> */}
 
       <Button
-        className={`${classes.button} ${classes.loginButton}`}
-        onClick={() => onButtonClick(ROUTES.login.path)}
+        className={`${classes.button} ${classes.startButton}`}
+        onClick={() => onButtonClick()}
       >
         <Typography variant="h4" className={classes.buttonText}>
-          LOGIN
+          START NOW 
         </Typography>
       </Button>
     </div>

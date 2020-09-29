@@ -159,7 +159,9 @@ const RoomList = ({ roomList, userID }) => {
           }
           return true;
         })
-        .map((room, index) => (
+        // TODO
+        .sort((room1, room2) => room1.started - room2.started)
+        .map((room) => (
           <div key={room.id}>
             <ListItem
               // button
