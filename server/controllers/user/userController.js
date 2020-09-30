@@ -131,8 +131,8 @@ const sendFriendRequest = async (request, response) => {
         "sentFriendRequests": targetID,
       }
     })
-    // const users = (await User.find()).filter((user) => user.public);
-    // request.app.get('socketio').emit('allUsers', users);
+    const users = (await User.find()).filter((user) => user.public);
+    request.app.get('socketio').emit('allUsers', users);
     response.json({
       message: "Friend request sent!"
     })

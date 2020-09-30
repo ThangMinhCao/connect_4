@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,7 +8,10 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RoomUseStyle from './RoomPage-style';
 import Avatar from '@material-ui/core/Avatar';
+import UserInfoDialog from './UserInfoDialog';
 import FriendListMenu from './FriendListMenu';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
 // import server_api from '../../api/server_api';
 // import ENDPOINTS from '../../constants/endpoints';
@@ -31,18 +34,45 @@ const AppBarUseStyles = makeStyles({
   autoCompleteTextField: {
     backgroundColor: 'white'
   },
+
+  item: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%'
+  }
 })
 
-const RoomAppBar = ({ socket, setDrawerOpened, allPublicUsers, userDialogRef, setChosenUser }) => {
+const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
   const classes = RoomUseStyle();
   const internalClasses = AppBarUseStyles();
-  // const [text, setText] = useState('');
+  const [allPublicUsers, setAllPublicUsers] = useState([]);
+  const [chosenUser, setChosenUser] = useState(null);
+  const userDialogRef = useRef();
 
-  const handleChooseUser = (event, value) => {
-    setChosenUser(value);
-    userDialogRef.current.handleOpenDialog();
+  const handleChooseUser = (user) => {
+    setChosenUser(user);
+    userDialogRef.current.handleOpenDialog(user);
     // setText('');
   }
+
+  useEffect(() => {
+    const getAllUsers = async() => {
+      try {
+        await server_api.get(ENDPOINTS.getAllUsers);
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getAllUsers();
+    socket.on('allUsers', (data) => {
+      setAllPublicUsers(data)
+    });
+    return () => {
+      socket.removeAllListeners('allUsers');
+    }
+  }, [])
 
   return (
     <AppBar position="fixed">
@@ -62,18 +92,19 @@ const RoomAppBar = ({ socket, setDrawerOpened, allPublicUsers, userDialogRef, se
             options={allPublicUsers}
             autoHighlight
             getOptionLabel={(user) => user.username}
+            getOptionSelected={(option, value) => value.value === option.value}
             renderOption={(user) => (
-              <>
+              <div className={internalClasses.item} onClick={() => handleChooseUser(user)}>
                 <Avatar>{user.username[0].toUpperCase()}</Avatar>
                 <span style={{ paddingLeft: 20 }}>
                   {user.username}
                 </span>
-              </>
+              </div>
             )}
             onKeyPress={e => {
               if (e.key === 'Enter') return null;
             }}
-            onChange={handleChooseUser}
+            // onChange={handleChooseUser}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -88,6 +119,7 @@ const RoomAppBar = ({ socket, setDrawerOpened, allPublicUsers, userDialogRef, se
         </div>
         <FriendListMenu iconClassName={internalClasses.profileIcon} />
       </Toolbar>
+      <UserInfoDialog ref={userDialogRef} user={chosenUser} currentUserID={userID} />
     </AppBar>
   )
 } 

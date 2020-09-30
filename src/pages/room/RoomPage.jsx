@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,7 +12,7 @@ import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
 import RoomAppBar from './RoomAppBar'; 
 import CreateRoomDialog from './CreateRoomDialog';
-import UserInfoDialog from './UserInfoDialog';
+// import UserInfoDialog from './UserInfoDialog';
 // import DefaultAvatar from '../../assets/default-avatar.jpg';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
@@ -30,7 +30,7 @@ const RoomPage = ({ socket, userID, username }) => {
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
-  const [chosenUser, setChosenUser] = useState(null);
+  // const [chosenUser, setChosenUser] = useState(null);
   const [currentGames, setCurrentGames] = useState([
     {
       id: 12345,
@@ -59,8 +59,6 @@ const RoomPage = ({ socket, userID, username }) => {
   ]);
   const [roomList, setRoomList] = useState([]);
   const [drawerOpened, setDrawerOpened] = useState(false);
-  const [allPublicUsers, setAllPublicUsers] = useState([]);
-  const userDialogRef = useRef();
   const classes = RoomUseStyle();
 
   const history = useHistory();
@@ -80,26 +78,13 @@ const RoomPage = ({ socket, userID, username }) => {
         console.log('An error occurs: ', err);
       }
     }
-    const getAllUsers = async() => {
-      try {
-        await server_api.get(ENDPOINTS.getAllUsers);
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    getAllUsers();
     getAllGames();
-
-    socket.on('allUsers', (data) => {
-      setAllPublicUsers(data)
-    });
 
     socket.on('allGames', (data) => {
       setRoomList(data)
     });
     return () => {
       socket.removeAllListeners('allGames');
-      socket.removeAllListeners('allUsers');
     }
   }, [])
 
@@ -130,11 +115,11 @@ const RoomPage = ({ socket, userID, username }) => {
     <div className={classes.page}>
       {/* {renderAppBar()} */}
       <RoomAppBar
-        allPublicUsers={allPublicUsers}
+        // allPublicUsers={allPublicUsers}
         socket={socket}
         setDrawerOpened={setDrawerOpened}
-        userDialogRef={userDialogRef}
-        setChosenUser={setChosenUser}
+        userID={userID}
+        // setChosenUser={setChosenUser}
       />
       <div className={classes.body}>
         <UserDrawer
@@ -164,7 +149,6 @@ const RoomPage = ({ socket, userID, username }) => {
           />
         </div>
       </div>
-      <UserInfoDialog ref={userDialogRef} user={chosenUser} currentUserID={userID} />
     </div>
   )
 }

@@ -132,6 +132,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
           token: localStorage.getItem('account_token')
         }
       });
+      handleClose();
     } catch (err) {
       console.log(err.response.data.message);
     }
