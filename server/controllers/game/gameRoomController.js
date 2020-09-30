@@ -38,7 +38,7 @@ const createNewRoom = async (request, response) => {
 
 const getAllGames = async (request, response) => {
   try {
-    const games = await Game.find();
+    const games = await Game.find({ public: true });
     response.json({
       games
     })
@@ -59,16 +59,16 @@ const joinGame = async (request, response) => {
     if (game.players.length === 2) throw 'Game slots are full!';
     await Game.findOneAndUpdate({ _id: game._id }, { "$push": {
       "players": request.userID,
-    }})
+    }}, {useFindAndModify: false})
 
     await User.findOneAndUpdate({ id: request.userID }, { "$push": {
       "currentGames": gameID,
-    }})
+    }}, {useFindAndModify: false})
 
     response.json({
       message: 'Join game successfully!',
     })
-    request.app.get('socketio').emit('allGames', games);
+    // request.app.get('socketio').emit('allGames', games);
     // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
     response.status(400).send(err);

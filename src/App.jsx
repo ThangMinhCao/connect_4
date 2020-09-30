@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SocketIOClient from "socket.io-client";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Base64 } from 'js-base64';
+import { useHistory } from 'react-router-dom';
 import ROUTES from './routes';
 import server_api from './api/server_api';
 import ENDPOINTS from './constants/endpoints';
@@ -11,6 +11,7 @@ let socket = SocketIOClient(ENDPOINTS.index);
 const App = () => {
   const [userID, setUserID] = useState('');
   const [username, setUsername] = useState('');
+  const history = useHistory();
 
   const handleLogin = () => {
 
@@ -23,6 +24,10 @@ const App = () => {
           token: localStorage.getItem('account_token'),
         },
       });
+      if (response.data.error) {
+        console.log(response.data.error);
+        history.push('/');
+      }
       setUserID(response.data.id);
       setUsername(response.data.username);
     } catch (error) {

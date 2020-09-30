@@ -12,6 +12,7 @@ import DISC_COLORS from '../../constants/discColors';
 const IngamePage = () => {
   // TODO
   /* eslint-disable */
+  const [gameID, setGameID] = useState('');
   const [yourTurn, setYourTurn] = useState(true);
   const [opponentDiscColor, setOpponentDiscColor] = useState(COLORS.game.redDisc);
 

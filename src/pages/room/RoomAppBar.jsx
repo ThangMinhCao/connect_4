@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -58,9 +58,9 @@ const RoomAppBar = ({ socket, setDrawerOpened, allPublicUsers, userDialogRef, se
         <div className={internalClasses.autoCompleteBlock}>
           <Autocomplete
             className={internalClasses.autoComplete}
-            freeSolo
             disableClearable
             options={allPublicUsers}
+            autoHighlight
             getOptionLabel={(user) => user.username}
             renderOption={(user) => (
               <>
@@ -70,6 +70,9 @@ const RoomAppBar = ({ socket, setDrawerOpened, allPublicUsers, userDialogRef, se
                 </span>
               </>
             )}
+            onKeyPress={e => {
+              if (e.key === 'Enter') return null;
+            }}
             onChange={handleChooseUser}
             renderInput={(params) => (
               <TextField

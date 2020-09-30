@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const SECRET = require('../constants/secret');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 const verifyToken = (request, response, next) => {
   const token = request.headers.token;
@@ -8,8 +10,8 @@ const verifyToken = (request, response, next) => {
       message: "Missing token!",
     });
   };
-  jwt.verify(token, SECRET, (err, decodedToken) => {
-    if (err) {
+  jwt.verify(token, SECRET, async (err, decodedToken) => {
+    if (err || !await User.findOne({ id: decodedToken.id })) {
       return response.send({
         error: 'Invalid token!',
       });

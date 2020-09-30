@@ -12,6 +12,7 @@ const FriendListUseStyles = makeStyles({
   menu: {
     maxHeight: 500,
     minHeight: 200,
+    overflow: 'auto',
   },
 
   username: {
@@ -115,7 +116,7 @@ const FriendListMenu = ({ userID, iconClassName }) => {
 
   return (
     <div>
-      <IconButton onMouseOver={handleOpen} onClick={handleOpen}>
+      <IconButton onClick={handleOpen}>
         <GroupIcon className={iconClassName} />
       </IconButton>
       <Menu

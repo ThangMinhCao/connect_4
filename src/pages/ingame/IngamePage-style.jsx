@@ -15,8 +15,10 @@ const IngameUseStyle = makeStyles((theme) => ({
   },
 
   gameBoard: {
+    flex: 1,
     fontFamily: FONTS.pixel,
     width: '100vw',
+    alignItems: 'center',
   },
 
   content: {

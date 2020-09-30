@@ -85,8 +85,10 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
                   label="Room Name"
                   fullWidth
                   value={name}
+
                   required
                   onChange={(e) => setName(e.target.value)}
+                  inputProps={{ maxLength: 30 }}
                   InputProps={{
                     classes: {
                       input: classes.text,
@@ -118,7 +120,10 @@ const CreateRoomDialog = ({ open, handleClose, handleOpen }) => {
               </div>
             <DialogActions>
             <Button
-              onClick={handleClose}
+              onClick={() => {
+                handleClose();
+                setName('');
+              }}
               color="primary"
               className={classes.text}
             >

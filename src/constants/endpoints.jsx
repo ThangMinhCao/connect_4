@@ -8,6 +8,9 @@ const ENDPOINTS = {
   joinGame: '/games/join',
   getAllUsers: '/users',
   getFriendList: '/users/friendList',
+  sendFriendRequest: '/users/sendFriendRequest',
+  acceptFriendRequest: '/users/acceptFriendRequest',
+  cancelFriendRequest: '/users/cancelFriendRequest',
 }
 
 export default ENDPOINTS;

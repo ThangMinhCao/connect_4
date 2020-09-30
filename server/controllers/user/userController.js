@@ -109,10 +109,69 @@ const getUserFromToken = (request, response) => {
   }
 }
 
+const sendFriendRequest = async (request, response) => {
+  try {
+    const { targetID } = request.body;
+    const userID = request.userID;
+    const target = await User.findOne({ id: targetID });
+
+    if (userID === targetID
+      || target.friends.includes(userID)
+      ||target.comingFriendRequests.includes(userID)) {
+      throw "Bad friend request call.";
+    }
+    await User.updateOne({ id: targetID }, {
+      "$push": {
+        "comingFriendRequests": userID,
+      }
+    })
+
+    await User.updateOne({ id: userID }, {
+      "$push": {
+        "sentFriendRequests": targetID,
+      }
+    })
+    // const users = (await User.find()).filter((user) => user.public);
+    // request.app.get('socketio').emit('allUsers', users);
+    response.json({
+      message: "Friend request sent!"
+    })
+  } catch (err) {
+    response.status(400).send({
+      message: err
+    });
+  }
+}
+
+const acceptFriendRequest = async (request, response) => {
+  try {
+    const { targetID } = request.body;
+    const userID = request.userID;
+
+    await User.updateOne({ id: targetID }, {
+      "$pull": {"comingFriendRequests": userID},
+      "$push": {"friends": userID}
+    })
+
+    await User.updateOne({ id: userID }, {
+      "$pull": {"sentFriendRequests": targetID},
+      "$push": {"friends": targetID}
+    })
+
+    response.json({
+      message: "Friend accepted!",
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
 module.exports = {
   signup,
   login,
   getAllUsers,
   getUserFromToken,
   getFriendList,
+  sendFriendRequest,
+  acceptFriendRequest,
 }

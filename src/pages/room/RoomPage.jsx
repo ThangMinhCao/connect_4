@@ -30,7 +30,7 @@ const RoomPage = ({ socket, userID, username }) => {
   const [victoryNumber, setVictoryNumber] = useState(0);
   const [loseNumber, setLoseNumber] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
-  const [chosenUser, setChosenUser] = useState({});
+  const [chosenUser, setChosenUser] = useState(null);
   const [currentGames, setCurrentGames] = useState([
     {
       id: 12345,
@@ -66,9 +66,9 @@ const RoomPage = ({ socket, userID, username }) => {
   const history = useHistory();
 
   useEffect(() => {
-    // if (!localStorage.getItem('account_token')) {
-    //   history.push('/login');
-    // }
+    if (!localStorage.getItem('account_token')) {
+      history.push('/login');
+    }
   }, [history])
 
   useEffect(() => {
@@ -164,7 +164,7 @@ const RoomPage = ({ socket, userID, username }) => {
           />
         </div>
       </div>
-      <UserInfoDialog ref={userDialogRef} user={chosenUser} />
+      <UserInfoDialog ref={userDialogRef} user={chosenUser} currentUserID={userID} />
     </div>
   )
 }

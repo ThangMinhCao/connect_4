@@ -121,8 +121,7 @@ const RoomList = ({ roomList, userID }) => {
           }
         }
       );
-      console.log(roomList);
-
+      // console.log(roomList);
       console.log(response.data.message);
     } catch (err) {
       console.log('Error: ', err.response.data);  
@@ -152,9 +151,9 @@ const RoomList = ({ roomList, userID }) => {
         .filter((room) => {
           if (searchTerm) {
             return (
-              room.name.includes(searchTerm)
-              || room.owner.ownerName.includes(searchTerm)
-              || room.id.includes(searchTerm)
+              room.name.includes(searchTerm.trim())
+              || room.owner.ownerName.includes(searchTerm.trim())
+              || room.id.includes(searchTerm.trim())
             );
           }
           return true;

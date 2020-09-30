@@ -63,6 +63,7 @@ const LoginPage = ({ handleLogin }) => {
       localStorage.setItem('account_token', response.data.token);
       handleLogin();
       history.push('/room');
+      history.go(0);
     } catch (error) {
       console.log(error);
       showAlert(AlertTypes.ERROR, error);

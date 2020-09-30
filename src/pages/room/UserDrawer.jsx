@@ -3,9 +3,13 @@ import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useHistory } from 'react-router-dom';
 
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
@@ -51,6 +55,13 @@ const DrawerUseStyle = makeStyles({
     top: 30,
     fontFamily: FONTS.pixel,
     color: 'white',
+  },
+
+  logoutButton: {
+    position: 'absolute',
+    borderRadius: 5000,
+    top: 100,
+    left: 20,
   }
 });
 
@@ -58,6 +69,13 @@ const UserDrawer = ({
   userID, username, victoryNumber, loseNumber, currentGamesNumber, open, setOpen
 }) => {
   const classes = DrawerUseStyle();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    localStorage.removeItem('account_token');
+    history.push('/');
+    history.go(0);
+  }
 
   return (
     <Drawer
@@ -104,6 +122,16 @@ const UserDrawer = ({
       <Typography variant='h5' className={classes.drawerInfo}>
         Current: {currentGamesNumber} 
       </Typography>
+      <Tooltip title="Logout">
+        <Button
+          color="primary"
+          variant="outlined"
+          className={classes.logoutButton}
+          onClick={handleLogout}
+        >
+          <ExitToAppIcon fontSize="large" style={{ color: 'white' }} />
+        </Button>
+      </Tooltip>
     </Drawer>
   )
 }

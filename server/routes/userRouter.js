@@ -7,6 +7,8 @@ router.post('/signup', userController.signup);
 router.get('/verifyUser', auth.verifyToken, userController.getUserFromToken);
 router.get('/', userController.getAllUsers);
 router.get('/friendList', auth.verifyToken, userController.getFriendList);
+router.post('/sendFriendRequest', auth.verifyToken, userController.sendFriendRequest);
+router.patch('/acceptFriendRequest', auth.verifyToken, userController.acceptFriendRequest);
 
 // router.get('/:id', )
 

@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema({
 
   // array of user id
   friends: [String],
+
+  comingFriendRequests: [String],
+  sentFriendRequests: [String],
 });
 
 mongoose.model('User', userSchema);

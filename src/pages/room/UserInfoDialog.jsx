@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,6 +10,8 @@ import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
@@ -89,7 +91,8 @@ const useStyles = makeStyles({
 
 })
 
-const UserInfoDialog = forwardRef(({ user }, ref) => {
+const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
+  // const { user, currentUserID } = props;
   const classes = useStyles();
   const [opened, setOpened] = useState(false);
   const history = [
@@ -119,84 +122,206 @@ const UserInfoDialog = forwardRef(({ user }, ref) => {
   const  handleClose = () => setOpened(false);
   const  handleOpen = () => setOpened(true);
 
+  const handleSendFriendRequest = async () => {
+    // console.log(currentUserID);
+    try {
+      await server_api.post(ENDPOINTS.sendFriendRequest, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
+
+  // TODO
+  const handleAcceptFriendRequest = async () => {
+    // console.log(currentUserID);
+    try {
+      await server_api.post(ENDPOINTS.sendFriendRequest, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
+
+  const handleRejectFriendRequest = async () => {
+    // console.log(currentUserID);
+    try {
+      await server_api.remove(ENDPOINTS.cancelFriendRequest, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
+
+  const handleCancelFriendRequest = async () => {
+    // console.log(currentUserID);
+    try {
+      await server_api.remove(ENDPOINTS.cancelFriendRequest, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
+
   useImperativeHandle (ref, () => ({
     handleOpenDialog() {handleOpen()}
   }));
 
-  return (
-    <Dialog
-      maxWidth="lg"
-      fullWidth
-      open={opened}
-      PaperProps={{
-        style: {
-          backgroundColor: COLORS.background
-        }
-      }}
-      onClose={handleClose}
-    >
-      <DialogTitle>
-        <div className={classes.title}>
-          <Avatar className={classes.avatar}>T</Avatar>
-          <span className={classes.titleText}>{user.username}</span>
-          <span className={classes.summary}>
-            <span>
-              <b>Game played</b>: 10
-            </span>
-            <span>
-              <b>Winrate</b>: 10%
-            </span>
-          </span>
-        </div>
-      </DialogTitle>
-      <DialogContent>
-        <div className={classes.body}>
-          <div className={classes.history}>
-            <span className={classes.bodyText}><b>History</b></span>
-            <List>
-              {
-                history.map((game, index) => (
-                  <ListItem
-                    button
-                    className={game.win ? classes.winHistory : classes.loseHistory}
-                    key={index}
-                  >
-                    <p className={classes.text}>
-                      {game.name}
-                    </p>
-                  </ListItem>
-                ))
-              }
-            </List>
-          </div>
-          <Divider orientation="vertical" flexItem/>
-          <div className={classes.currentGames}>
-            <span className={classes.bodyText}><b>Current Games</b></span>
-            <List className={classes.currentGameList}>
-              {
-                currentGames.map((game, index) => (
-                  <ListItem button key={index}>
-                    <p className={classes.text}>
-                      {game}
-                    </p>
-                  </ListItem>
-                ))
-              }
-            </List>
-          </div>
-        </div>
-      </DialogContent>
-      <DialogActions>
+  const renderAddFriendButton = () => {
+    if (!user || currentUserID === user.id) return;
+    if (user.friends.includes(currentUserID)) {
+      return (
         <Button
           variant="contained"
-          color="primary"
-          onClick={handleClose}
+          color="secondary"
+          onClick={handleSendFriendRequest}
         >
-          Close
+          Unfriend
         </Button>
-        <Button variant="contained" color="primary">Add Friend</Button>
-      </DialogActions>
-    </Dialog>
+      )
+    } else if(user.sentFriendRequests.includes(currentUserID)) {
+      return (
+        <>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAcceptFriendRequest}
+          >
+            Accept friend request
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleCancelFriendRequest}
+          >
+            Reject friend request
+          </Button>
+        </>
+      )
+    } else if (user.comingFriendRequests.includes(currentUserID)) {
+      return (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleCancelFriendRequest}
+        >
+          Cancel friend request
+        </Button>
+      )
+    }
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSendFriendRequest}
+      >
+        Add friend
+      </Button>
+    )
+  }
+  
+  const renderDialog = () => {
+    if (user) {
+      return (
+        <Dialog
+          maxWidth="lg"
+          fullWidth
+          open={opened}
+          PaperProps={{
+            style: {
+              backgroundColor: COLORS.background
+            }
+          }}
+          onClose={handleClose}
+        >
+          <DialogTitle>
+            <div className={classes.title}>
+              <Avatar className={classes.avatar}>T</Avatar>
+              <span className={classes.titleText}>{user.username}</span>
+              <span className={classes.summary}>
+                <span>
+                  <b>Game played</b>: 10
+                </span>
+                <span>
+                  <b>Winrate</b>: 10%
+                </span>
+              </span>
+            </div>
+          </DialogTitle>
+          <DialogContent>
+            <div className={classes.body}>
+              <div className={classes.history}>
+                <span className={classes.bodyText}><b>History</b></span>
+                <List>
+                  {
+                    history.map((game, index) => (
+                      <ListItem
+                        button
+                        className={game.win ? classes.winHistory : classes.loseHistory}
+                        key={index}
+                      >
+                        <p className={classes.text}>
+                          {game.name}
+                        </p>
+                      </ListItem>
+                    ))
+                  }
+                </List>
+              </div>
+              <Divider orientation="vertical" flexItem/>
+              <div className={classes.currentGames}>
+                <span className={classes.bodyText}><b>Current Games</b></span>
+                <List className={classes.currentGameList}>
+                  {
+                    currentGames.map((game, index) => (
+                      <ListItem button key={index}>
+                        <p className={classes.text}>
+                          {game}
+                        </p>
+                      </ListItem>
+                    ))
+                  }
+                </List>
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+            {renderAddFriendButton()}
+          </DialogActions>
+        </Dialog>
+      )
+    }
+    return <div />;
+  }
+  return (
+    renderDialog()
   )
 });
 
