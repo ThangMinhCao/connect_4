@@ -24,6 +24,7 @@ const COLORS = {
   gameCard: {
     yourTurn: '#9FBB77',
     opponentTurn: '#FFD35C',
+    waiting: '#ABB0AE',
   },
 
   game: {

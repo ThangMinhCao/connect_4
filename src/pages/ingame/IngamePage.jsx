@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 // import queryString from 'query-string';
-import io from 'socket.io-client';
-
 import GameInfoDrawer from './GameInfoDrawer';
 import IngameStyles from './IngamePage-style';
 import GameBoard from './GameBoard';
 import EndGameDialog from './EndGameDialog';
 import COLORS from '../../constants/colors';
 import DISC_COLORS from '../../constants/discColors';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
-const IngamePage = () => {
+const IngamePage = ({ socket, userID, roomID }) => {
   // TODO
   /* eslint-disable */
-  const [gameID, setGameID] = useState('');
   const [yourTurn, setYourTurn] = useState(true);
   const [opponentDiscColor, setOpponentDiscColor] = useState(COLORS.game.redDisc);
-
   const [boardSize, setBoardSize] = useState([7, 6])
   const [board, setBoard] = useState();
   const [playerCode, setPlayerCode] = useState(2);
   const [isGameEnd, setIsGameEnd] = useState(false);
   const [winner, setWinner] = useState(0);
   const classes = IngameStyles();
+
+  const [gameInfo, setGameInfo] = useState({});
+  const history = useHistory();
 
   // TODO send resquest on board change
   // useEffect(() => {
@@ -31,14 +33,57 @@ const IngamePage = () => {
   // }, [board])
 
   useEffect(() => {
-    // socket = io(ENDPOINT);
-  })
+    if (!socket || !userID || !localStorage.getItem('account_token')) {
+      history.push('/room');
+    }
+  }, [history])
 
   useEffect(() => {
-    if (board) {
-      checkGameEnd();
+    const getGameInfo = async () => {
+      try {
+        await server_api.get(ENDPOINTS.getGame, {
+          headers: {
+            token: localStorage.getItem('account_token')
+          }, 
+          params: {
+            roomID
+          }
+        });
+        // setRoomList(response.data.games)
+      } catch (err) {
+        console.log('An error occurs: ', err);
+      }
     }
-  }, [board])
+    getGameInfo();
+
+    socket.on(`game#${roomID}`, (data) => {
+      console.log(data.game);
+      setGameInfo(data.game);
+      setBoard(data.board);
+    });
+    return () => {
+      socket.removeAllListeners(`board#${roomID}`);
+    }
+  }, [])
+
+  const playAMove = async (column) => {
+    try {
+      const response = await server_api.put(ENDPOINTS.playAMove, {
+        params: {
+          roomID,
+          column 
+        }
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }, 
+      });
+      console.log(response.data.message);
+      // setRoomList(response.data.games)
+    } catch (err) {
+      console.log('An error occurs: ', err);
+    }
+  }
 
   const togglePlayerCode = () => {
     if (playerCode === 1) {
@@ -58,24 +103,6 @@ const IngamePage = () => {
      if (!board.some((row) => row.includes(0))) {
        setIsGameEnd(true);
      }
-  }
-
-  const onPlayATurn = (col) => {
-    const newBoard = [];
-    for (let i = 0; i < boardSize[1]; i++) {
-      newBoard.push([]);
-      for (let j = 0; j < boardSize[0]; j++) {
-        newBoard[i].push(board[i][j]); 
-      }
-    }
-    for (let i = boardSize[1] - 1; i >= 0; i--) {
-      if (newBoard[i][col] === 0) {
-        newBoard[i][col] = playerCode;
-        break;
-      }
-    }
-    setBoard(newBoard);
-    onSwitchTurn();
   }
 
   useEffect(() => {
@@ -104,7 +131,7 @@ const IngamePage = () => {
         <GameBoard
           board={board}
           size={boardSize}
-          move={onPlayATurn}
+          move={playAMove}
         />
       </div>
       <EndGameDialog winner={winner} playerCode={playerCode} isGameEnd={isGameEnd} />

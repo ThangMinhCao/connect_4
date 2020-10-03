@@ -11,6 +11,9 @@ const ENDPOINTS = {
   sendFriendRequest: '/users/sendFriendRequest',
   acceptFriendRequest: '/users/acceptFriendRequest',
   cancelFriendRequest: '/users/cancelFriendRequest',
+  playAMove: '/games/playAMove',
+  startGame: '/games/startGame',
+  getGame: '/games/getGame',
 }
 
 export default ENDPOINTS;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -89,10 +90,10 @@ const useStyles = makeStyles({
   }
 });
 
-const RoomList = ({ roomList, userID }) => {
+const RoomList = ({ onChooseRoom, roomList, userID }) => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState('');
-
+  const history = useHistory();
   // TODO
   // const handleChooseRoom = (roomID) => {
   // }
@@ -107,12 +108,12 @@ const RoomList = ({ roomList, userID }) => {
     return { title: 'Join this room', buttonDisabled: false };
   }
 
-  const joinRoom = async (gameID) => {
+  const joinRoom = async (roomID) => {
     try {
-      const response = await server_api.patch(ENDPOINTS.joinGame, 
+      const response = await server_api.put(ENDPOINTS.joinGame, 
         {
           params: {
-            gameID,
+            roomID,
           }
         },
         {
@@ -122,6 +123,8 @@ const RoomList = ({ roomList, userID }) => {
         }
       );
       // console.log(roomList);
+      onChooseRoom(roomID);
+      history.push('/ingame');
       console.log(response.data.message);
     } catch (err) {
       console.log('Error: ', err.response.data);  

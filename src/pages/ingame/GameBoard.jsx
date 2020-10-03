@@ -12,7 +12,7 @@ import DISC_COLORS from '../../constants/discColors';
 // const boardRow = 6;
 // const boardColumn = 7;
 
-const Board = ({ board, size, width, height, move }) => {
+const Board = ({ board, width, height, move }) => {
   // const [rows, cols] = size;
   const generateCell = (cellSize) => {
     return (

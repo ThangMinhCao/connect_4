@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Paper from '@material-ui/core/Paper';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
 import UserDrawer from './UserDrawer';
-import CurrentGameCard from './CurrentGameCard';
 import RoomUseStyle from './RoomPage-style';
 import RoomList from './RoomList';
 import RoomAppBar from './RoomAppBar'; 
 import CreateRoomDialog from './CreateRoomDialog';
-// import UserInfoDialog from './UserInfoDialog';
-// import DefaultAvatar from '../../assets/default-avatar.jpg';
+import CurrentGameList from './CurrentGameList';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
@@ -23,7 +18,7 @@ import ENDPOINTS from '../../constants/endpoints';
 
 // const ENDPOINT = 'localhost:4000';
 
-const RoomPage = ({ socket, userID, username }) => {
+const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
   // TODO
   /* eslint-disable */
   // const [avatar, setAvatar] = useState(DefaultAvatar);
@@ -34,27 +29,27 @@ const RoomPage = ({ socket, userID, username }) => {
   const [currentGames, setCurrentGames] = useState([
     {
       id: 12345,
-      opponentName: 'opponent 1',
-      opponentID: 'opponent id',
+      opponentName: '',
       yourTurn: false,
+      started: false,
     },
     {
       id: 1234567,
       opponentName: 'opponent 1',
-      opponentID: 'opponent id',
-      yourTurn: true,
+      yourTurn: false,
+      started: true,
     },
     {
       id: 1234568,
       opponentName: 'opponent 1',
-      opponentID: 'opponent id',
       yourTurn: true,
+      started: true,
     },
     {
       id: 123456,
       opponentName: 'opponent 1',
-      opponentID: 'opponent id',
       yourTurn: true,
+      started: true,
     },
   ]);
   const [roomList, setRoomList] = useState([]);
@@ -88,29 +83,6 @@ const RoomPage = ({ socket, userID, username }) => {
     }
   }, [])
 
-  const renderCurrentGames = () => {
-    return (
-      <Paper elevation={0} className={classes.currentGameList}>
-        <List className={classes.list} cols={6}>
-          {
-            currentGames
-              .sort((game1, game2) => game2.yourTurn - game1.yourTurn)
-              .map((game) => (
-                <ListItem className={classes.item} key={game.id}>
-                  <CurrentGameCard
-                    opponentName='Opponent'
-                    opponentID='#opponentID'
-                    yourTurn={game.yourTurn}
-                  />
-                </ListItem>
-              )
-            )
-          }
-        </List>
-      </Paper>
-    )
-  }
-
   return (
     <div className={classes.page}>
       {/* {renderAppBar()} */}
@@ -134,8 +106,8 @@ const RoomPage = ({ socket, userID, username }) => {
           className={classes.drawer}
         />
         <div className={classes.content}>
-          {renderCurrentGames()}
-          <RoomList roomList={roomList} userID={userID} />
+          <CurrentGameList currentGames={currentGames} />
+          <RoomList onChooseRoom={onChooseRoom} roomList={roomList} userID={userID} />
           <Fab
             className={classes.addButton}
             onClick={() => setDialogOpened(true)}

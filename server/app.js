@@ -25,6 +25,7 @@ connectDB();
 // models
 require('./models/User');
 require('./models/Game');
+require('./models/Board');
 
 // routes
 app.use("/users", require("./routes/userRouter"));

@@ -12,4 +12,4 @@ const boardSchema = new mongoose.Schema({
   }
 });
 
-mongoose.model('board', boardSchema);
+mongoose.model('Board', boardSchema);

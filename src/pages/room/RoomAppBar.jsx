@@ -72,7 +72,7 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
     return () => {
       socket.removeAllListeners('allUsers');
     }
-  }, [])
+  }, [socket])
 
   return (
     <AppBar position="fixed">

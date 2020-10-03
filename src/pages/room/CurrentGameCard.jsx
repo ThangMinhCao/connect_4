@@ -12,7 +12,14 @@ const useStyles = makeStyles({
     height: 150,
     width: 400,
     borderRadius: 15,
-    backgroundColor: (yourTurn) => yourTurn ? COLORS.gameCard.yourTurn : COLORS.gameCard.opponentTurn,
+    backgroundColor: ({ yourTurn, started }) => {
+      if (!started) {
+        return COLORS.gameCard.waiting;
+      } else if (yourTurn) {
+        return COLORS.gameCard.yourTurn;
+      }
+      return COLORS.gameCard.opponentTurn;
+    },
   },
 
   cardButton: {
@@ -28,12 +35,33 @@ const useStyles = makeStyles({
   cardText: {
     fontFamily: FONTS.pixel,
   },
+
+  cardState: {
+    fontFamily: FONTS.pixel,
+    fontSize: 30,
+  },
 });
 
 const CurrentGameCard = ({
-  opponentName, opponentID, yourTurn 
+  opponentName, yourTurn, started
 }) => {
-  const classes = useStyles(yourTurn);
+  const classes = useStyles({ yourTurn, started });
+
+  const renderGameState = () => {
+    let text;
+    if (!started) {
+      text = 'Waiting';
+    } else if (yourTurn) {
+      text = 'Your Turn'
+    } else {
+      text = "Opponent's Turn"
+    }
+    return (
+      <Typography className={classes.cardState} variant='h5'>
+        {text}
+      </Typography>
+    )
+  }
 
   return (
     <Card className={classes.card} elevation={5}>
@@ -44,16 +72,9 @@ const CurrentGameCard = ({
           </Typography>
 
           <Typography className={classes.cardText} variant='h5'>
-            {opponentName} 
+            {opponentName ? opponentName : '..........'} 
           </Typography>
-
-          <Typography className={classes.cardText}>
-            ID: {opponentID} 
-          </Typography>
-
-          <Typography className={classes.cardText} variant='h5'>
-            {yourTurn ? 'Your turn' : 'Opponent\'s Turn'} 
-          </Typography>
+          {renderGameState()}
         </CardContent>
       </ButtonBase>
     </Card>

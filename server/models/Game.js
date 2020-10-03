@@ -38,6 +38,7 @@ const gameSchema = new mongoose.Schema({
 
   currentPlayer: {
     type: String,
+    default: '',
   },
 
   movesOccured: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -154,20 +154,20 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
     }
   }
 
-  const handleRejectFriendRequest = async () => {
-    // console.log(currentUserID);
-    try {
-      await server_api.remove(ENDPOINTS.cancelFriendRequest, {
-        targetID: user.id,
-      }, {
-        headers: {
-          token: localStorage.getItem('account_token')
-        }
-      });
-    } catch (err) {
-      console.log(err.response.data.message);
-    }
-  }
+  // const handleRejectFriendRequest = async () => {
+  //   // console.log(currentUserID);
+  //   try {
+  //     await server_api.remove(ENDPOINTS.cancelFriendRequest, {
+  //       targetID: user.id,
+  //     }, {
+  //       headers: {
+  //         token: localStorage.getItem('account_token')
+  //       }
+  //     });
+  //   } catch (err) {
+  //     console.log(err.response.data.message);
+  //   }
+  // }
 
   const handleCancelFriendRequest = async () => {
     // console.log(currentUserID);
