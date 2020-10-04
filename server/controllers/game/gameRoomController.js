@@ -24,19 +24,21 @@ const createNewRoom = async (request, response) => {
     const creatorID = request.userID;
     if (!creatorID) throw "Missing creator's id.";
 
-    const foundUser = await User.findOne({ id: creatorID });
-    if (!foundUser) {
-      throw "Creator's ID not available.";
-    };
-
     const roomID = uuid.generate();
+    await User.findOneAndUpdate({ id: creatorID }, {
+      "$addToSet": {
+        "currentGames": roomID, 
+      }
+    }, { useFindAndModify: true }, (err, result) => {
+      if (err) throw "Creator's ID not available.";
+    });
+
     const gameRoom = new Game({
       name: !name ? 'Empty name' : name,
       id: roomID,
       owner: { ownerID: creatorID, ownerName: request.username },
       password: !password ? undefined : password,
       players: [creatorID],
-      currentGames: [roomID],
       public
     });
 
@@ -49,12 +51,14 @@ const createNewRoom = async (request, response) => {
     await newBoard.save();
     // console.log(await Board.findOne({id: roomID}));
     const games = await Game.find();
-    request.app.get('socketio').emit('allGames', games);
+    const app = request.app;
+    app.get('socketio').emit('allGames', games);
+    getCurrentGames(request, response);
     response.json({
       message: `Room: '${name}' was created successfully!`
     });
   } catch (err) {
-    response.status(400).send(err);
+    response.status(400).send({ message: err });
   }
 };
 
@@ -67,12 +71,13 @@ const getAllGames = async (request, response) => {
     request.app.get('socketio').emit('allGames', games);
     // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
-    response.status(400).send(err);
+    response.status(400).send({ message: err });
   }
 };
 
 const joinGame = async (request, response) => {
   try {
+    const app = request.app;
     const { roomID } = request.body.params;
     const game = await Game.findOne({ id: roomID });
     if (!game) throw 'Game not available!';
@@ -86,14 +91,23 @@ const joinGame = async (request, response) => {
     await User.findOneAndUpdate({ id: request.userID }, { "$push": {
       "currentGames": roomID,
     }}, {useFindAndModify: false})
+    app.get('socketio').emit('allGames', await Game.find({ public: true }));
 
+    const ownerCurrentGameIDs = (await User.findOne({ id: game.owner.ownerID})).currentGames;
+    const ownerCurrentGames = await Game.find({
+      "id": {
+        "$in": ownerCurrentGameIDs,
+      }
+    })
+    console.log(game.owner.ownerID);
+
+    app.get('socketio').emit(`currentGames#${game.owner.ownerID}`, ownerCurrentGames);
     response.json({
       message: 'Join game successfully!',
     })
     // request.app.get('socketio').emit('allGames', games);
-    // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
-    response.status(400).send(err);
+    response.status(400).send({ message: err });
   }
 }
 
@@ -107,7 +121,7 @@ const startGame = async (request, response) => {
     })
     request.app.get('socketio').emit(`game#${roomID}`, foundGame);
   } catch (err) {
-    response.status(400).send(err);
+    response.status(400).send({ message: err });
   }
 }
 
@@ -117,13 +131,30 @@ const getGame = async (request, response) => {
     const foundGame = await Game.findOne({ id: roomID });
     const foundBoard = await Board.findOne({ id: roomID });
 
+    const app = request.app;
     if (!foundGame || !foundBoard) throw 'This game does not exist.';
-    request.app.get('socketio').emit(`game#${roomID}`, {
+    app.get('socketio').to(app.get('socketID')).emit(`game#${roomID}`, {
       game: foundGame,
       board: foundBoard.board
     });
   } catch (err) {
-    response.status(400).send(err); 
+    response.status(400).send({ message: err }); 
+  }
+}
+
+const getCurrentGames = async (request, response) => {
+  try {
+    const currentGameIDs = (await User.findOne({ id: request.userID })).currentGames;
+    const currentGames = await Game.find({
+      "id": {
+        "$in": currentGameIDs,
+      }
+    })
+
+    const app = request.app;
+    app.get('socketio').to(app.get('socketID')).emit(`currentGames#${request.userID}`, currentGames);
+  } catch (err) {
+    response.status(400).send({ message: err }); 
   }
 }
 
@@ -133,4 +164,5 @@ module.exports = {
   joinGame,
   startGame,
   getGame,
+  getCurrentGames,
 };

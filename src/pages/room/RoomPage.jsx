@@ -26,32 +26,6 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
   const [loseNumber, setLoseNumber] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
   // const [chosenUser, setChosenUser] = useState(null);
-  const [currentGames, setCurrentGames] = useState([
-    {
-      id: 12345,
-      opponentName: '',
-      yourTurn: false,
-      started: false,
-    },
-    {
-      id: 1234567,
-      opponentName: 'opponent 1',
-      yourTurn: false,
-      started: true,
-    },
-    {
-      id: 1234568,
-      opponentName: 'opponent 1',
-      yourTurn: true,
-      started: true,
-    },
-    {
-      id: 123456,
-      opponentName: 'opponent 1',
-      yourTurn: true,
-      started: true,
-    },
-  ]);
   const [roomList, setRoomList] = useState([]);
   const [drawerOpened, setDrawerOpened] = useState(false);
   const classes = RoomUseStyle();
@@ -100,13 +74,13 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
           username={username}
           victoryNumber={victoryNumber}
           loseNumber={loseNumber}
-          currentGamesNumber={currentGames.length}
+          // currentGamesNumber={currentGames.length}
           open={drawerOpened}
           setOpen={setDrawerOpened}
           className={classes.drawer}
         />
         <div className={classes.content}>
-          <CurrentGameList currentGames={currentGames} />
+          <CurrentGameList socket={socket} userID={userID} />
           <RoomList onChooseRoom={onChooseRoom} roomList={roomList} userID={userID} />
           <Fab
             className={classes.addButton}

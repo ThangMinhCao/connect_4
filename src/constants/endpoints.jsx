@@ -14,6 +14,7 @@ const ENDPOINTS = {
   playAMove: '/games/playAMove',
   startGame: '/games/startGame',
   getGame: '/games/getGame',
+  getCurrentGames: '/games/current',
 }
 
 export default ENDPOINTS;

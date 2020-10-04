@@ -23,6 +23,7 @@ const playAMove = async (request, response) => {
     const foundBoard = await Board.findOne({ id: roomID });
     if (!foundBoard) throw 'Board not available.';
     const foundGame = await Game.findOne({ id: roomID });
+    if (!foundGame.started) throw 'This game is not started yet!';
     const playerCode = foundGame.players.indexOf(playerID) + 1;
 
     const newBoard = foundBoard.board;
@@ -37,7 +38,7 @@ const playAMove = async (request, response) => {
       "$set" : { "board": newBoard }
     })
 
-    const updatedGame = await Game.updateOne({ id: roomID }, {
+    const updatedGame = await Game.findOneAndUpdate({ id: roomID }, {
       "$inc": { "movesOccured": 1 }
     })
     request.app.get('socketio').emit(`game#${roomID}`, {

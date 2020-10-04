@@ -10,5 +10,6 @@ router.put('/join', auth.verifyToken, gameController.joinGame);
 router.put('/playAMove', auth.verifyToken, gamePlayController.playAMove);
 router.put('/startGame', auth.verifyToken, gameController.startGame);
 router.get('/getGame', auth.verifyToken, gameController.getGame);
+router.get('/current', auth.verifyToken, gameController.getCurrentGames);
 
 module.exports = router;

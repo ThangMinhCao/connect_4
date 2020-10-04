@@ -51,13 +51,13 @@ const IngamePage = ({ socket, userID, roomID }) => {
         });
         // setRoomList(response.data.games)
       } catch (err) {
-        console.log('An error occurs: ', err);
+        console.log('An error occurs: ', err.response.data);
       }
     }
     getGameInfo();
 
     socket.on(`game#${roomID}`, (data) => {
-      console.log(data.game);
+      console.log(data);
       setGameInfo(data.game);
       setBoard(data.board);
     });
@@ -67,6 +67,7 @@ const IngamePage = ({ socket, userID, roomID }) => {
   }, [])
 
   const playAMove = async (column) => {
+    console.log(gameInfo);
     try {
       const response = await server_api.put(ENDPOINTS.playAMove, {
         params: {
@@ -78,10 +79,9 @@ const IngamePage = ({ socket, userID, roomID }) => {
           token: localStorage.getItem('account_token')
         }, 
       });
-      console.log(response.data.message);
-      // setRoomList(response.data.games)
+      // console.log(response.data.message);
     } catch (err) {
-      console.log('An error occurs: ', err);
+      console.log('An error occurs: ', err.response.data);
     }
   }
 

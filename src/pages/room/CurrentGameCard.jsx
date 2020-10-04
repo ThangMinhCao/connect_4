@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -43,19 +43,31 @@ const useStyles = makeStyles({
 });
 
 const CurrentGameCard = ({
-  opponentName, yourTurn, started
+  game, userID
 }) => {
-  const classes = useStyles({ yourTurn, started });
+  const [yourTurn, setYourTurn] = useState(false);
+  const classes = useStyles({ yourTurn, started: game.started });
+
+  const getOpponentName = () => {
+    return game.players.filter((id) => id !== userID)[0];
+  }
+
+  const opponentName = getOpponentName(); 
+
+  useEffect(() => {
+    setYourTurn(userID === game.currentPlayer);
+
+  }, [game])
 
   const renderGameState = () => {
-    let text;
-    if (!started) {
-      text = 'Waiting';
-    } else if (yourTurn) {
-      text = 'Your Turn'
-    } else {
-      text = "Opponent's Turn"
-    }
+    let text= '12312';
+    // if (!started) {
+    //   text = 'Waiting';
+    // } else if (yourTurn) {
+    //   text = 'Your Turn'
+    // } else {
+    //   text = "Opponent's Turn"
+    // }
     return (
       <Typography className={classes.cardState} variant='h5'>
         {text}
