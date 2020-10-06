@@ -40,8 +40,14 @@ const gameSchema = new mongoose.Schema({
   },
 
   currentPlayer: {
-    type: String,
-    default: '',
+    type: {
+      id: String,
+      username: String,
+    },
+    default: {
+      id: '',
+      username: '',
+    }
   },
 
   movesOccured: {

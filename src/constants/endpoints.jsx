@@ -2,6 +2,7 @@ const ENDPOINTS = {
   index: 'http://localhost:4000/',
   signup: '/users/signup',
   login: '/users/login',
+  logout: '/users/logout',
   createRoom: '/games/create',
   getRoomList: '/games',
   verifyUser: '/users/verifyUser',

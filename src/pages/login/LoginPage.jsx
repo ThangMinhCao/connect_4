@@ -23,7 +23,7 @@ const AlertTypes = {
   SUCCESS: 'success',
 }
 
-const LoginPage = ({ handleLogin }) => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loggingIn, setLoggingIng] = useState(true);
@@ -61,7 +61,6 @@ const LoginPage = ({ handleLogin }) => {
       }
       showAlert(AlertTypes.SUCCESS, response.data.message);
       localStorage.setItem('account_token', response.data.token);
-      handleLogin();
       history.push('/room');
       history.go(0);
     } catch (error) {
@@ -91,7 +90,6 @@ const LoginPage = ({ handleLogin }) => {
 
   const handleBackHome = () => {
     history.push('/');
-    // handleLogin();
     history.go(0);
   }
 

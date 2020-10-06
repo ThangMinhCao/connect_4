@@ -34,7 +34,7 @@ const CurrentGameList = ({ socket, userID }) => {
     return () => {
       socket.removeAllListeners(`currentGames#${userID}`);
     }
-  }, [userID])
+  }, [userID, socket])
 
   const listComparator = (game1, game2) => {
     if (game1.started && !game2.started) return -1;

@@ -10,6 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useHistory } from 'react-router-dom';
+import server_api from '../../api/server_api';
+import ENDPOINTS from '../../constants/endpoints';
 
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
@@ -71,7 +73,20 @@ const UserDrawer = ({
   const classes = DrawerUseStyle();
   const history = useHistory();
 
+  const logout = async () => {
+    try {
+      await server_api.put(ENDPOINTS.logout, null, {
+        headers: {
+          token: localStorage.getItem('account_token'),
+        },
+      });
+    } catch (error) {
+      console.log('An error occurs: ', error);  
+    }
+  }
+
   const handleLogout = () => {
+    logout();
     localStorage.removeItem('account_token');
     history.push('/');
     history.go(0);

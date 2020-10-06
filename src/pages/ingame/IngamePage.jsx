@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 // import queryString from 'query-string';
 import GameInfoDrawer from './GameInfoDrawer';
 import IngameStyles from './IngamePage-style';
 import GameBoard from './GameBoard';
 import EndGameDialog from './EndGameDialog';
+import StartGameDialog from './StartGameDialog';
 import COLORS from '../../constants/colors';
 import DISC_COLORS from '../../constants/discColors';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
-const IngamePage = ({ socket, userID, roomID }) => {
+const IngamePage = ({ socket, userID }) => {
   // TODO
   /* eslint-disable */
   const [yourTurn, setYourTurn] = useState(true);
@@ -21,22 +22,17 @@ const IngamePage = ({ socket, userID, roomID }) => {
   const [isGameEnd, setIsGameEnd] = useState(false);
   const [winner, setWinner] = useState(0);
   const classes = IngameStyles();
+  const location = useLocation();
 
   const [gameInfo, setGameInfo] = useState({});
   const history = useHistory();
 
-  // TODO send resquest on board change
-  // useEffect(() => {
-  //   return () => {
-  //     cleanup
-  //   }
-  // }, [board])
-
   useEffect(() => {
-    if (!socket || !userID || !localStorage.getItem('account_token')) {
+    if (!location.state) {
       history.push('/room');
     }
   }, [history])
+  const roomID = location.state.roomID;
 
   useEffect(() => {
     const getGameInfo = async () => {
@@ -57,18 +53,17 @@ const IngamePage = ({ socket, userID, roomID }) => {
     getGameInfo();
 
     socket.on(`game#${roomID}`, (data) => {
-      console.log(data);
       setGameInfo(data.game);
       setBoard(data.board);
     });
     return () => {
-      socket.removeAllListeners(`board#${roomID}`);
+      socket.removeAllListeners(`game#${roomID}`);
     }
   }, [])
 
   const playAMove = async (column) => {
     try {
-      const response = await server_api.put(ENDPOINTS.playAMove, {
+      await server_api.put(ENDPOINTS.playAMove, {
         params: {
           roomID,
           column 
@@ -78,7 +73,6 @@ const IngamePage = ({ socket, userID, roomID }) => {
           token: localStorage.getItem('account_token')
         }, 
       });
-      // console.log(response.data.message);
     } catch (err) {
       console.log('An error occurs: ', err.response.data);
     }
@@ -92,10 +86,10 @@ const IngamePage = ({ socket, userID, roomID }) => {
     }
   }
 
-  const onSwitchTurn = () => {
-    setYourTurn(!yourTurn);
-    togglePlayerCode();
-  }
+  // const onSwitchTurn = () => {
+  //   setYourTurn(!yourTurn);
+  //   togglePlayerCode();
+  // }
 
   // i, j represent the position of last move
   const checkGameEnd = (i, j) => {
@@ -121,6 +115,7 @@ const IngamePage = ({ socket, userID, roomID }) => {
 
   return (
     <div className={classes.page}>
+      <StartGameDialog game={gameInfo} userID={userID} />
       <GameInfoDrawer
         yourTurn={yourTurn}
         discColor={DISC_COLORS[playerCode]}

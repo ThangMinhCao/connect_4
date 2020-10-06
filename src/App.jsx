@@ -11,11 +11,18 @@ let socket = SocketIOClient(ENDPOINTS.index);
 const App = () => {
   const [userID, setUserID] = useState('');
   const [username, setUsername] = useState('');
-  const [currentRoomID, setCurrentRoomID] = useState('');
   const history = useHistory();
 
-  const handleLogin = () => {
-
+  const handleLogout = async () => {
+    try {
+      await server_api.put(ENDPOINTS.logout, null, {
+        headers: {
+          token: localStorage.getItem('account_token'),
+        },
+      });
+    } catch (error) {
+      console.log('An error occurs: ', error);  
+    }
   }
 
   useEffect(() => {
@@ -37,6 +44,12 @@ const App = () => {
       }
     }
     verifyUser();
+
+    window.addEventListener('beforeunload', (event) => {
+      event.preventDefault();
+      // event.returnValue = '';
+      handleLogout();
+    });
   }, [history])
 
   return (
@@ -54,17 +67,17 @@ const App = () => {
           key={ROUTES.login.key}
           path={ROUTES.login.path}
           exact={ROUTES.login.exact}
-          // component={ROUTES.login.component}
-          render={() => (
-            ROUTES.login.component({ handleLogin })
-          )}
+          component={ROUTES.login.component}
+          // render={() => (
+          //   ROUTES.login.component()
+          // )}
         />
         <Route
           key={ROUTES.room.key}
           path={ROUTES.room.path}
           exact={ROUTES.room.exact}
           render={() => (
-            ROUTES.room.component({ socket, userID, username, onChooseRoom: setCurrentRoomID })
+            ROUTES.room.component({ socket, userID, username })
           )}
         />
         <Route
@@ -72,7 +85,7 @@ const App = () => {
           path={ROUTES.ingame.path}
           exact={ROUTES.ingame.exact}
           render={() => (
-            ROUTES.ingame.component({ socket, userID, roomID: currentRoomID })
+            ROUTES.ingame.component({ socket, userID })
           )}
         />
         {/* <Route

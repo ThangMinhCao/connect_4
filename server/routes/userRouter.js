@@ -4,6 +4,7 @@ const auth = require('../middlewares/userAuth');
 
 router.post('/login', userController.login);
 router.post('/signup', userController.signup);
+router.put('/logout', auth.verifyToken, userController.logout);
 router.get('/verifyUser', auth.verifyToken, userController.getUserFromToken);
 router.get('/', userController.getAllUsers);
 router.get('/friendList', auth.verifyToken, userController.getFriendList);

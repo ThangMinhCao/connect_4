@@ -90,7 +90,7 @@ const useStyles = makeStyles({
   }
 });
 
-const RoomList = ({ onChooseRoom, roomList, userID }) => {
+const RoomList = ({ roomList, userID }) => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState('');
   const history = useHistory();
@@ -123,8 +123,10 @@ const RoomList = ({ onChooseRoom, roomList, userID }) => {
         }
       );
       // console.log(roomList);
-      onChooseRoom(roomID);
-      history.push('/ingame');
+      history.push({
+        pathname: '/ingame',
+        state: { roomID }
+      });
       console.log(response.data.message);
     } catch (err) {
       console.log('Error: ', err.response.data);  

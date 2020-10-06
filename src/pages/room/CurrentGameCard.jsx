@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,9 +13,9 @@ const useStyles = makeStyles({
     height: 150,
     width: 400,
     borderRadius: 15,
-    backgroundColor: ({ yourTurn, started }) => {
+    backgroundColor: ({ yourTurn, started, playerNum }) => {
       if (!started) {
-        return COLORS.gameCard.waiting;
+        return playerNum === 2 ? COLORS.gameCard.ready : COLORS.gameCard.waiting;
       } else if (yourTurn) {
         return COLORS.gameCard.yourTurn;
       }
@@ -40,13 +41,29 @@ const useStyles = makeStyles({
     fontFamily: FONTS.pixel,
     fontSize: 30,
   },
+
+  roomName: {
+    fontFamily: FONTS.pixel,
+    position: 'absolute',
+    top: 10,
+    left: 15,
+    fontSize: 12,
+    maxWidth: 140,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }
 });
 
 const CurrentGameCard = ({
   game, userID
 }) => {
-  const [yourTurn, setYourTurn] = useState(false);
-  const classes = useStyles({ yourTurn, started: game.started });
+  const history = useHistory();
+
+  const checkYourTurn = () => {
+    return game.currentPlayer.id === userID; 
+  }
+  const classes = useStyles({ yourTurn: checkYourTurn(), started: game.started, playerNum: game.players.length });
 
   const getOpponentName = () => {
     const opponentName = game.players.filter((player) => player.id !== userID)[0];
@@ -55,16 +72,25 @@ const CurrentGameCard = ({
 
   const opponentName = getOpponentName(); 
 
+  // reload when click back
   useEffect(() => {
-    setYourTurn(userID === game.currentPlayer);
+    window.onpopstate = e => {
+      history.go(0);
+    }
+  })
 
-  }, [game])
+  const handleGoToRoom = () => {
+    history.push({
+      pathname: '/ingame',
+      state: { roomID: game.id }
+    });
+  }
 
   const renderGameState = () => {
     let text;
     if (!game.started) {
-      text = 'Waiting';
-    } else if (yourTurn) {
+      text = game.players.length === 1 || game.owner.ownerID !== userID ? 'Waiting' : 'Ready';
+    } else if (checkYourTurn) {
       text = 'Your Turn'
     } else {
       text = "Opponent's Turn"
@@ -78,8 +104,9 @@ const CurrentGameCard = ({
 
   return (
     <Card className={classes.card} elevation={5}>
-      <ButtonBase className={classes.cardButton}>
+      <ButtonBase className={classes.cardButton} onClick={handleGoToRoom}>
         <CardContent >
+          <Typography className={classes.roomName}>{game.name}</Typography>
           <Typography className={classes.cardText} variant='h5'>
             vs.
           </Typography>

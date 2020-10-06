@@ -25,9 +25,11 @@ const COLORS = {
     yourTurn: '#9FBB77',
     opponentTurn: '#FFD35C',
     waiting: '#ABB0AE',
+    ready: '#85ADD6',
   },
 
   game: {
+    startDialog: '#2E763D',
     yourTurn: '#9FBB77',
     opponentTurn: '#393424',
     redDisc: '#CC000E',

@@ -55,6 +55,12 @@ const login = async (request, response) => {
       throw 'Username and password does not match.';
     };
 
+    await User.updateOne({ id: user.id }, {
+      "$set": {
+        "online": true,
+      }
+    })
+
     const token = jwt.sign({ id: user.id, username }, SECRET);
     response.json({
       message: `${username} logged in successfully!`,
@@ -98,11 +104,28 @@ const getFriendList = async (request, response) => {
   }
 }
 
-const getUserFromToken = (request, response) => {
+const getUserFromToken = async (request, response) => {
   try {
+    await User.updateOne({ id: request.userID }, {
+      "$set": {
+        online: true,
+      }
+    })
     response.json({
       username: request.username,
       id: request.userID,
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
+const logout = async (request, response) => {
+  try {
+    await User.updateOne({ id: request.userID }, {
+      "$set": {
+        online: false,
+      }
     })
   } catch (err) {
     response.status(400).send(err);
@@ -169,6 +192,7 @@ const acceptFriendRequest = async (request, response) => {
 module.exports = {
   signup,
   login,
+  logout,
   getAllUsers,
   getUserFromToken,
   getFriendList,

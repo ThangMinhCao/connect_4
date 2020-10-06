@@ -29,7 +29,7 @@ const createNewRoom = async (request, response) => {
       "$addToSet": {
         "currentGames": roomID, 
       }
-    }, { useFindAndModify: true }, (err, result) => {
+    }, { useFindAndModify: false }, (err, result) => {
       if (err) throw "Creator's ID not available.";
     });
 
@@ -53,7 +53,7 @@ const createNewRoom = async (request, response) => {
     const games = await Game.find();
     const app = request.app;
     app.get('socketio').emit('allGames', games);
-    getCurrentGames(request, response);
+    emitCurrentGames(creatorID, app.get('socketio'));
     response.json({
       message: `Room: '${name}' was created successfully!`
     });
@@ -69,10 +69,20 @@ const getAllGames = async (request, response) => {
       games
     })
     request.app.get('socketio').emit('allGames', games);
-    // request.app.get('socketio').broadcast.emit('allGames', games);
   } catch (err) {
     response.status(400).send({ message: err });
   }
+};
+
+const emitCurrentGames = async (userID, socket) => {
+  const foundUser = await User.findOne({ id: userID });
+  const ownerCurrentGameIDs = foundUser.currentGames;
+  const ownerCurrentGames = await Game.find({
+    "id": {
+      "$in": ownerCurrentGameIDs,
+    }
+  })
+  socket.emit(`currentGames#${userID}`, ownerCurrentGames);
 };
 
 const joinGame = async (request, response) => {
@@ -93,15 +103,8 @@ const joinGame = async (request, response) => {
     }}, {useFindAndModify: false})
     app.get('socketio').emit('allGames', await Game.find({ public: true }));
 
-    const ownerCurrentGameIDs = (await User.findOne({ id: game.owner.ownerID})).currentGames;
-    const ownerCurrentGames = await Game.find({
-      "id": {
-        "$in": ownerCurrentGameIDs,
-      }
-    })
-    console.log(game.owner.ownerID);
-
-    app.get('socketio').emit(`currentGames#${game.owner.ownerID}`, ownerCurrentGames);
+    emitCurrentGames(game.owner.ownerID, app.get('socketio'));
+    getGame(request, response);
     response.json({
       message: 'Join game successfully!',
     })
@@ -114,29 +117,42 @@ const joinGame = async (request, response) => {
 const startGame = async (request, response) => {
   try {
     const { roomID } = request.body.params;
-    const foundGame = await Game.findOne({ id: roomID })
+    const foundGame = await Game.findOne({ id: roomID });
+    const foundBoard = await Board.findOne({ id: roomID });
     if (!foundGame) throw 'This game doesn\'t exist.';
+    if (foundGame.owner.ownerID !== request.userID) throw 'You are not the owner.';
+    const randomFirstPlayer = foundGame.players[Math.floor(Math.random() * 2)];
     await Game.updateOne({ id: roomID }, {
-      "$set": { "currentPlayer": foundGame.players[Math.floor(Math.random() * 2)]}
+      "$set": { "currentPlayer": randomFirstPlayer},
+      "$set": { "started": true },
     })
-    request.app.get('socketio').emit(`game#${roomID}`, foundGame);
+
+    request.app.get('socketio').emit(`game#${roomID}`, {
+      game: {...foundGame, started: true, currentPlayer: randomFirstPlayer},
+      board: foundBoard.board
+    });
+    const opponentID = foundGame.players.filter((player) => player.id !== request.userID)[0].id;
+    await emitCurrentGames(opponentID, request.app.get('socketio'));
   } catch (err) {
     response.status(400).send({ message: err });
   }
 }
 
+const getCurrentGameInfo = async (roomID, socket) => {
+  const foundGame = await Game.findOne({ id: roomID });
+  const foundBoard = await Board.findOne({ id: roomID });
+
+  if (!foundGame || !foundBoard) return new Error('This game does not exist.');
+  socket.emit(`game#${roomID}`, {
+    game: foundGame,
+    board: foundBoard.board
+  });
+}
+
 const getGame = async (request, response) => {
   try {
     const { roomID } = request.query; 
-    const foundGame = await Game.findOne({ id: roomID });
-    const foundBoard = await Board.findOne({ id: roomID });
-
-    const app = request.app;
-    if (!foundGame || !foundBoard) throw 'This game does not exist.';
-    app.get('socketio').to(app.get('socketID')).emit(`game#${roomID}`, {
-      game: foundGame,
-      board: foundBoard.board
-    });
+    getCurrentGameInfo(roomID, request.app.get('socketio'));
   } catch (err) {
     response.status(400).send({ message: err }); 
   }
@@ -144,15 +160,7 @@ const getGame = async (request, response) => {
 
 const getCurrentGames = async (request, response) => {
   try {
-    const currentGameIDs = (await User.findOne({ id: request.userID })).currentGames;
-    const currentGames = await Game.find({
-      "id": {
-        "$in": currentGameIDs,
-      }
-    })
-
-    const app = request.app;
-    app.get('socketio').to(app.get('socketID')).emit(`currentGames#${request.userID}`, currentGames);
+    emitCurrentGames(request.userID, request.app.get('socketio'));
   } catch (err) {
     response.status(400).send({ message: err }); 
   }

@@ -12,12 +12,6 @@ import CurrentGameList from './CurrentGameList';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
 
-// import io from 'socket.io-client';
-
-// let socket;
-
-// const ENDPOINT = 'localhost:4000';
-
 const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
   // TODO
   /* eslint-disable */
@@ -80,7 +74,7 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
           className={classes.drawer}
         />
         <div className={classes.content}>
-          <CurrentGameList socket={socket} userID={userID} />
+          <CurrentGameList socket={socket} userID={userID} onChooseRoom={onChooseRoom} />
           <RoomList onChooseRoom={onChooseRoom} roomList={roomList} userID={userID} />
           <Fab
             className={classes.addButton}

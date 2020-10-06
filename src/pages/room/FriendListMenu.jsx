@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import server_api from '../../api/server_api';
 import ENDPOINTS from '../../constants/endpoints';
+import FONTS from '../../constants/fonts';
 
 const FriendListUseStyles = makeStyles({
   menu: {
@@ -18,6 +19,13 @@ const FriendListUseStyles = makeStyles({
   username: {
     flex: 1,
     paddingLeft: 15,
+    fontFamily: FONTS.pixel,
+    fontSize: 15,
+  },
+
+  avatar: {
+    fontFamily: FONTS.pixel,
+    fontSize: 12,
   },
 
   friendItem: {
@@ -36,11 +44,18 @@ const FriendListUseStyles = makeStyles({
 
   offline: {
     backgroundColor: '#b3b3b3',
-  }
+  },
+
+  title: {
+    fontFamily: FONTS.pixel,
+    fontSize: 10,
+    paddingLeft: 10,
+  },
 })
 
 const FriendListMenu = ({ userID, iconClassName }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  /* eslint-disable */
   const [friendList, setFriendList] = useState([
     {
       username: 'Friend1',
@@ -105,7 +120,7 @@ const FriendListMenu = ({ userID, iconClassName }) => {
       return(
         friendList.sort((friend1, friend2) => friend2.online - friend1.online).map((friend, index) => (
           <MenuItem key={index} className={classes.friendItem}>
-            <Avatar>F{index+1}</Avatar>
+            <Avatar className={classes.avatar}>F{index+1}</Avatar>
             <span className={classes.username}>{friend.username}</span>
             <div className={`${classes.sign} ${friend.online ? classes.online : classes.offline}`}></div>
           </MenuItem>
@@ -137,6 +152,7 @@ const FriendListMenu = ({ userID, iconClassName }) => {
           horizontal: 'center'
         }}
       >
+        <div className={classes.title}>Friend list</div>
         {renderFriendList()}
       </Menu>
     </div>
