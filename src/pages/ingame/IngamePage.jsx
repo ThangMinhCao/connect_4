@@ -67,7 +67,6 @@ const IngamePage = ({ socket, userID, roomID }) => {
   }, [])
 
   const playAMove = async (column) => {
-    console.log(gameInfo);
     try {
       const response = await server_api.put(ENDPOINTS.playAMove, {
         params: {

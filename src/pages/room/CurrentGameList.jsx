@@ -28,7 +28,7 @@ const CurrentGameList = ({ socket, userID }) => {
 
   useEffect(() => {
     socket.on(`currentGames#${userID}`, (data) => {
-      console.log(data);
+      // console.log(data);
       setCurrentGames(data);
     });
     return () => {

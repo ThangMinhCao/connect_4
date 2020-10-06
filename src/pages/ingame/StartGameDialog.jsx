@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-const EndGameDialog = ({ game, userID }) => {
+const StartGameDialog = ({ game, userID }) => {
   const classes = useStyles(winnerState);
 
   const onExit = () => {
@@ -54,7 +54,6 @@ const EndGameDialog = ({ game, userID }) => {
     <Dialog fullScreen open={!game.started}>
       <div className={classes.page}>
         <Typography className={classes.headerText}>
-
         </Typography>
         <Button
           className={`${classes.button} ${classes.startButton}`}
@@ -69,4 +68,4 @@ const EndGameDialog = ({ game, userID }) => {
   )
 }
 
-export default EndGameDialog;
+export default StartGameDialog;

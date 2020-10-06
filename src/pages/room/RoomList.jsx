@@ -98,7 +98,7 @@ const RoomList = ({ onChooseRoom, roomList, userID }) => {
   // const handleChooseRoom = (roomID) => {
   // }
   const generateTooltips = (room) => {
-    if (room.players.includes(userID)) {
+    if (room.players.filter(player => player.id === userID).length) {
       return { title: 'You\'re already in this room.', buttonDisabled: true };
     } else if (room.players.length === 2) {
       return { title: 'Room full', buttonDisabled: true };

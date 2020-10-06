@@ -38,7 +38,7 @@ const createNewRoom = async (request, response) => {
       id: roomID,
       owner: { ownerID: creatorID, ownerName: request.username },
       password: !password ? undefined : password,
-      players: [creatorID],
+      players: [{ id: creatorID, username: request.username }],
       public
     });
 
@@ -85,7 +85,7 @@ const joinGame = async (request, response) => {
 
     if (game.players.length === 2) throw 'Game slots are full!';
     await Game.findOneAndUpdate({ _id: game._id }, { "$push": {
-      "players": request.userID,
+      "players": { id: request.userID, username: request.username },
     }}, {useFindAndModify: false})
 
     await User.findOneAndUpdate({ id: request.userID }, { "$push": {

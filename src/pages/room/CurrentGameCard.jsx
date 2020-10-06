@@ -49,7 +49,8 @@ const CurrentGameCard = ({
   const classes = useStyles({ yourTurn, started: game.started });
 
   const getOpponentName = () => {
-    return game.players.filter((id) => id !== userID)[0];
+    const opponentName = game.players.filter((player) => player.id !== userID)[0];
+    return opponentName ? opponentName.username : '';
   }
 
   const opponentName = getOpponentName(); 
@@ -60,14 +61,14 @@ const CurrentGameCard = ({
   }, [game])
 
   const renderGameState = () => {
-    let text= '12312';
-    // if (!started) {
-    //   text = 'Waiting';
-    // } else if (yourTurn) {
-    //   text = 'Your Turn'
-    // } else {
-    //   text = "Opponent's Turn"
-    // }
+    let text;
+    if (!game.started) {
+      text = 'Waiting';
+    } else if (yourTurn) {
+      text = 'Your Turn'
+    } else {
+      text = "Opponent's Turn"
+    }
     return (
       <Typography className={classes.cardState} variant='h5'>
         {text}
