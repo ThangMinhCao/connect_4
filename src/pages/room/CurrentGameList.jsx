@@ -8,13 +8,21 @@ import RoomUseStyle from './RoomPage-style';
 const CurrentGameList = ({ userID, currentGames }) => {
   const classes = RoomUseStyle();
 
-  const listComparator = (game1, game2) => {
-    if (game1.started && !game2.started) return -1;
-    if (game2.started && !game1.started) return 1;
-    if (game1.yourTurn && !game2.yourTurn) return -1;
-    if (game2.yourTurn && !game1.yourTurn) return 1;
-    return 1;
+  const checkYourTurn = (game) => {
+    return game.currentPlayer.id === userID; 
   }
+
+  const checkReady = (game) => {
+    return game.players.length === 2; 
+  }
+
+  // const listComparator = (game1, game2) => {
+  //   if (game1.started && !game2.started) return -1;
+  //   if (game2.started && !game1.started) return 1;
+  //   if (game1.yourTurn && !game2.yourTurn) return -1;
+  //   if (game2.yourTurn && !game1.yourTurn) return 1;
+  //   return 1;
+  // }
 
   return (
     <>
@@ -24,7 +32,7 @@ const CurrentGameList = ({ userID, currentGames }) => {
           {
             currentGames
               .filter(game => game.started)
-              .sort(listComparator)
+              .sort((game1, game2) => checkYourTurn(game2) - checkYourTurn(game1))
               .map((game) => (
                 <ListItem className={classes.item} key={game.id}>
                   <CurrentGameCard
@@ -43,7 +51,7 @@ const CurrentGameList = ({ userID, currentGames }) => {
           {
             currentGames
               .filter(game => !game.started)
-              .sort(listComparator)
+              .sort((game1, game2) => checkReady(game2) - checkReady(game1))
               .map((game) => (
                 <ListItem className={classes.item} key={game.id}>
                   <CurrentGameCard

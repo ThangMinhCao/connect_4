@@ -102,7 +102,6 @@ const checkGameEnd = (board, lastMovePosition) => {
 }
 
 const checkFullBoard = (board) => {
-  console.log(board[0][0]);
   return !board.some(row => row.includes(0));
 }
 

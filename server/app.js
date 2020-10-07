@@ -47,10 +47,10 @@ mongoose.connection.on('error', (err) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('New connection occurs!');
+  // console.log('New connection occurs!');
   app.set('socketID', socket.id);
   socket.on('disconnect', () => {
-    console.log('User left!');
+    // console.log('User left!');
   })
 });
 

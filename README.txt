@@ -7,7 +7,8 @@ Project: Connect 4
 
 ####################### List of files/directories ##########################
 CLIENT SIDE:
- > Client technologies: React, Material UI, JSS (Material CSS in JS), axios
+ > Client technologies: React, Material UI and its JSS (Material CSS in JS), axios.
+ 
  #### For some components, I put the JSS style in the component file together ####
  Note: I'm just listing files/folders that are important, are used and created by me in my application.
  >> Client's source directory: /src
@@ -46,6 +47,7 @@ CLIENT SIDE:
             + CurrentGameCard.jsx: the component that specifies each card in the CurrentGameList, its style will be different for different states of the game like waiting for people, your turn, opponent's turn, etc.
             + CreateRoomDialog.jsx: the dialog component that appears every time you click the add button, this will ask you to enter the room name, public or not and create a new room based on the input.
             + RoomPage-style.jsx: contains some styles of main components of the page.
+            
 >> Server's souce directory: /server
     * app.js: contains every main instances of the server like express app, HTTP server, mongoose connection, socketio connection, etc.
     * constants: contains the server's constants.
@@ -67,14 +69,46 @@ CLIENT SIDE:
 ## These file: node_modules, package.json, package-lock.json, contain the information related to application's dependencies.
 
 ########################## Install instructions ########################
-1. In this folder (/connect_4), run 'npm install' on terminal to install React dependencies.
-2. In the same directory (/connect_4), run 'npm start' to start the client React on localhost:3000
-3. Start another terminal instance, navigate to /connect_4/server, run 'npm install' to install all dependencies for the server side.
-4. In /connect_4/server, run 'npm start' to start the project's Node.js server on localhost:4000.
+1. Start terminal, navigate to /connect_4/server, run 'npm install' to install all dependencies for the server side.
+2. In /connect_4/server, run 'npm start' to start the project's Node.js server on localhost:4000.
+3. Start another terminal instance, go to directory (/connect_4), run 'npm install' on terminal to install React dependencies.
+4. In the same directory (/connect_4), run 'npm start' to start the client React on localhost:3000
 5. Go to localhost:3000 on any browser to test the application.
-** Note that I haven't finished all functionalities so there may be some problems.
+** NOTES:   You must start the Node.js server first to get rid of some 'Not found' errors.
+            I haven't finished all functionalities so there are still some problems.
 
-#################### Additional functionalities ##################
-* I finished some functionalities related to server side, such as login, logout, signup account, realtime update when a user sign up or create a new public room, every client will be updated that add the room to RoomList component.
-* Some functionalities are still in development, such as game play, friend list update, accept friend request, cancel friend request, etc. So for some buttons you click will produce error there.
-* First going to the application, you need to sign up and login will work, you can test my application's mockups there. After login, if you want to go to different pages, you can specify room name after localhost:3000 like localhost:3000/ingame.    
+########################## Game play UI instructions ########################
+1. Sign up for a new account, then login. There must be one or more other players to start playing.
+   You can open an incogito/private browser window or using another browser (using chrome, open firefox) to create account, login and try the app.
+2. Create a new room, that room will appear on your 'Not started games' list, and show 'Waiting', and appear on every client's all public room list.
+3. Opponent/you can join an available room by clicking the blue arrow button if it's not disabled for some reason, and will be redirected to the game room.
+   The room in the 'Not started games' list will turn to 'Ready' and you can go to that room to start the game by clicking 'Start game' button in the game page.
+4. Once a game is started, the server will update on both client that the game has started. The owner has red disc color and the other has yellow.
+   The first turn's player will be picked randomly. Only the player of the current turn can play, you can look at the information to see the game state.
+   When the current player played, it will update on both client that the current player has been switched.
+5. A player can go outside by pressing 'back' button on the browser (I will make a home button later),
+   even though, the game is still in progress, you can come back by looking at the current game list for room name, opponent name.
+6. The game will continue until a player made a 4 in a row or the board is full.
+   If you are the one made the 4 in a row, the window will show 'You win' or otherwise 'You lose', or if the board is full: 'Tie'.
+   Then players can click exit to go back to the main page.
+7. A finished game will be removed from current game list and all current games of all players.
+   The functionalities that the finished games are added to the game histories of users will be added later.
+*** NOTES: First going to the application, you need to signup and then login will work.
+           You can observe the mongodb's game database to see its changes.
+
+#################### Finished Functionalities ##################
+* Almost finished the app's UI mockup because for the user information dialog, I may change it to a separate page.
+* Login/logout/signup using JWT/localStorage.
+* Create game room, join game room, add friend (only add, not yet accept and reject request).
+* Game play realtime with another opponent.
+*** NOTE: every changes related to game room, user are automatically updated when thay have changes. Possibly still having some bugs. ***
+
+################### Not finished Functionalities ###############
+* Accept/cancel/reject friend request.
+* See active friend list (The UI mockup is on the top right corner's button).
+* User information for game history and current games (mockup available by clicking on the user search bar and click on one of them).
+* Ingame chat is not yet available.
+* Remove room, surrender will be added.
+* Some additional functionalities like choosing disc color, sounds, gameplay effects/animations maybe added.
+
+########## For the server's endpoints and methods, I will list it in the next check-in since they are not required in this check-in.

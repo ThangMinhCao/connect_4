@@ -16,8 +16,8 @@ const useStyles = makeStyles({
     backgroundColor: ({ yourTurn, started, playerNum, youAreOwner }) => {
       if (!started) {
         return playerNum === 2 && youAreOwner
-          ? COLORS.gameCard.waiting
-          : COLORS.gameCard.ready;
+          ? COLORS.gameCard.ready
+          : COLORS.gameCard.waiting;
       } else if (yourTurn) {
         return COLORS.gameCard.yourTurn;
       }
@@ -65,6 +65,7 @@ const CurrentGameCard = ({
   const history = useHistory();
 
   const checkYourTurn = () => {
+    console.log(game.players);
     return game.currentPlayer.id === userID; 
   }
 
@@ -72,7 +73,7 @@ const CurrentGameCard = ({
     yourTurn: checkYourTurn(),
     started: game.started,
     playerNum: game.players.length,
-    youAreOwner: game.owner.ownerID !== userID,
+    youAreOwner: game.owner.ownerID === userID,
   });
 
   const getOpponentName = () => {
