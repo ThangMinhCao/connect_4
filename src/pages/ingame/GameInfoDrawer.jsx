@@ -1,13 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-// import Drawer from '@material-ui/core/Drawer';
-// import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
-// import DISC_COLORS from '../../constants/discColors';
 
-// const drawerWidth = '100vw';
 const padding = 'calc(0.5vh + 0.5vw)';
 
 const useStyles = makeStyles({
@@ -24,13 +20,13 @@ const useStyles = makeStyles({
   text: {
     color: (props) => props.yourTurn ? 'black' : 'white',
     marginLeft: '5vw',
-    fontSize: '1vw',
-    transform: 'scale(1.2, 1.9)',
+    fontSize: '1.2vw',
+    transform: 'scale(1.2, 1.5)',
   },
 
   drawerTurnStateText: {
     fontFamily: FONTS.pixel,
-    fontSize: '3.5vw',
+    fontSize: '3vw',
     paddingTop: padding,
     paddingLeft: padding,
   },
@@ -40,8 +36,17 @@ const useStyles = makeStyles({
     paddingTop: padding,
   },
 
+  roomName: {
+    fontSize: '1.2vw',
+    fontFamily: FONTS.pixel,
+    position: 'absolute',
+    top: 20,
+    right: '5vw',
+  },
+
   drawerInfo: {
     flex: 1,
+    textAlign: 'center',
   },
 
   drawerTurnState: {
@@ -54,19 +59,15 @@ const useStyles = makeStyles({
     width: 'calc(5vh + 5vw)',
     height: 'calc(5vh + 5vw)',
     margin: padding,
-    backgroundColor: (props) => props.discColor,
+    backgroundColor: (props) => props.yourTurn ? props.discColor : props.opponentDiscColor,
     transition: 'all 0.5s ease',
   }
 });
 
 const GameInfoDrawer = ({
-  yourTurn, discColor, opponentDiscColor
+  roomName, roomID, yourTurn, discColor, opponentDiscColor, movesPlayed
 }) => {
   const classes = useStyles({ yourTurn, discColor, opponentDiscColor });
-
-  // useEffect(() => {
-  //   console.log(opponentDiscColor);
-  // }, [])
 
   const renderCircle = () => {
     return (
@@ -85,8 +86,11 @@ const GameInfoDrawer = ({
         </Typography>
       </div>
       <div className={classes.drawerInfo}>
+        <Typography variant="h5" className={`${classes.text} ${classes.roomName}`}>
+          Room name: {roomName} // ID: {roomID}
+        </Typography>
         <Typography variant="h5" className={`${classes.text} ${classes.drawerTextInfo}`}>
-          Turns played: {0} 
+          Turns played: {movesPlayed} 
         </Typography>
 {/* 
         <Typography variant="h5" className={`${classes.text} ${classes.drawerTextInfo}`}>

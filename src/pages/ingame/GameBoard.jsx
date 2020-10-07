@@ -12,7 +12,7 @@ import DISC_COLORS from '../../constants/discColors';
 // const boardRow = 6;
 // const boardColumn = 7;
 
-const Board = ({ board, width, height, move }) => {
+const Board = ({ board, width, height, move, yourTurn }) => {
   // const [rows, cols] = size;
   const generateCell = (cellSize) => {
     return (
@@ -26,6 +26,12 @@ const Board = ({ board, width, height, move }) => {
         ))
       )) 
     )
+  }
+
+  const handleClickDisc = (col) => {
+    if (yourTurn) {
+      move(col)
+    }
   }
 
   const generateBoard = () => {
@@ -43,8 +49,8 @@ const Board = ({ board, width, height, move }) => {
               fill={cell.discColor}
               cornerRadius={100}
               shadowBlur={10}
-              onClick={() => move(j)}
-              onTap={() => move(j)}
+              onClick={() => handleClickDisc(j)}
+              onTap={() => handleClickDisc(j)}
             />
           ))
         ))
@@ -73,7 +79,7 @@ const Board = ({ board, width, height, move }) => {
 }
 
 const GameBoard = ({
-  board, size, move
+  board, size, move, yourTurn
 }) => {
   // const classes = IngameStyle();
 
@@ -114,6 +120,7 @@ const GameBoard = ({
           height={boardSize.height * 0.94}
           size={size}
           move={move}
+          yourTurn={yourTurn}
         />
       </Layer>
     </Stage>

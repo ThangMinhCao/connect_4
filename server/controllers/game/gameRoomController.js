@@ -17,6 +17,10 @@ const initializeBoard = (colNum, rowNum) => {
   return board;
 }
 
+const getAllPublicAvailableGames = async () => {
+  return await Game.find({ public: true, ended: false });
+}
+
 const createNewRoom = async (request, response) => {
   try {
     const { name, public, password } = request.body.params;
@@ -39,6 +43,7 @@ const createNewRoom = async (request, response) => {
       owner: { ownerID: creatorID, ownerName: request.username },
       password: !password ? undefined : password,
       players: [{ id: creatorID, username: request.username }],
+      currentPlayer: { id: '', username: '' },
       public
     });
 
@@ -50,7 +55,7 @@ const createNewRoom = async (request, response) => {
     await gameRoom.save();
     await newBoard.save();
     // console.log(await Board.findOne({id: roomID}));
-    const games = await Game.find();
+    const games = await getAllPublicAvailableGames();
     const app = request.app;
     app.get('socketio').emit('allGames', games);
     emitCurrentGames(creatorID, app.get('socketio'));
@@ -64,7 +69,7 @@ const createNewRoom = async (request, response) => {
 
 const getAllGames = async (request, response) => {
   try {
-    const games = await Game.find({ public: true });
+    const games = await getAllPublicAvailableGames();
     response.json({
       games
     })
@@ -101,7 +106,7 @@ const joinGame = async (request, response) => {
     await User.findOneAndUpdate({ id: request.userID }, { "$push": {
       "currentGames": roomID,
     }}, {useFindAndModify: false})
-    app.get('socketio').emit('allGames', await Game.find({ public: true }));
+    app.get('socketio').emit('allGames', await getAllPublicAvailableGames());
 
     emitCurrentGames(game.owner.ownerID, app.get('socketio'));
     getGame(request, response);
@@ -123,12 +128,15 @@ const startGame = async (request, response) => {
     if (foundGame.owner.ownerID !== request.userID) throw 'You are not the owner.';
     const randomFirstPlayer = foundGame.players[Math.floor(Math.random() * 2)];
     await Game.updateOne({ id: roomID }, {
-      "$set": { "currentPlayer": randomFirstPlayer},
-      "$set": { "started": true },
+      "$set": {
+        "currentPlayer": randomFirstPlayer,
+        "started": true
+      },
     })
-
+    foundGame.started = true;
+    foundGame.currentPlayer = randomFirstPlayer;
     request.app.get('socketio').emit(`game#${roomID}`, {
-      game: {...foundGame, started: true, currentPlayer: randomFirstPlayer},
+      game: foundGame,
       board: foundBoard.board
     });
     const opponentID = foundGame.players.filter((player) => player.id !== request.userID)[0].id;

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 
   roomList: {
     overflow: 'auto',
-    height: 'calc(100vh - 360px)',
+    height: 'calc(100vh - 614px)',
   },
 
   roomName: {

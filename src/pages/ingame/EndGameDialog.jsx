@@ -34,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
     color: (winner) => winner === WINNER.lose ? 'white' : 'black',
   },
 
+  info: {
+    fontFamily: '"Press Start 2P", cursive',
+    fontSize: 'calc(2vw + 1.5vh)',
+    color: (winner) => winner === WINNER.lose ? 'white' : 'black',
+  },
+
   button: {
     height: '25vh',
     width: '50vw',
@@ -55,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EndGameDialog = ({ isGameEnd, winner, playerCode }) => {
+const EndGameDialog = ({ isGameEnd, winner, userID, movesOccured }) => {
   const [winnerState, setWinnerState] = useState(WINNER.tie);  
   const [winnerText, setWinnerText] = useState('TIE');
   const history = useHistory();
@@ -65,19 +71,18 @@ const EndGameDialog = ({ isGameEnd, winner, playerCode }) => {
     if (!winner) {
       setWinnerState(WINNER.tie); 
       setWinnerText('TIE')
-    } else if (winner === playerCode) {
+    } else if (winner === userID) {
       setWinnerState(WINNER.win); 
       setWinnerText('YOU WIN')
     } else {
       setWinnerState(WINNER.lose); 
       setWinnerText('YOU LOSE')
     }
-      setWinnerState(WINNER.win); 
-      setWinnerText('YOU WIN')
   }
 
   const onExit = () => {
     history.push(ROUTES.room.path);
+    history.go(0);
   }
 
   useEffect(() => {
@@ -89,6 +94,9 @@ const EndGameDialog = ({ isGameEnd, winner, playerCode }) => {
       <div className={classes.page}>
         <Typography className={classes.headerText}>
           {winnerText}
+        </Typography>
+        <Typography className={classes.info}>
+          Moves occured: {movesOccured}
         </Typography>
         <Button
           className={`${classes.button} ${classes.startButton}`}

@@ -13,9 +13,11 @@ const useStyles = makeStyles({
     height: 150,
     width: 400,
     borderRadius: 15,
-    backgroundColor: ({ yourTurn, started, playerNum }) => {
+    backgroundColor: ({ yourTurn, started, playerNum, youAreOwner }) => {
       if (!started) {
-        return playerNum === 2 ? COLORS.gameCard.ready : COLORS.gameCard.waiting;
+        return playerNum === 2 && youAreOwner
+          ? COLORS.gameCard.waiting
+          : COLORS.gameCard.ready;
       } else if (yourTurn) {
         return COLORS.gameCard.yourTurn;
       }
@@ -35,11 +37,13 @@ const useStyles = makeStyles({
 
   cardText: {
     fontFamily: FONTS.pixel,
+    fontSize: 'calc(0.2vw + 0.5vh + 12px)',
   },
 
   cardState: {
     fontFamily: FONTS.pixel,
-    fontSize: 30,
+    fontSize: 'calc(0.6vw + 1vh + 12px)',
+    textDecoration: 'underline'
   },
 
   roomName: {
@@ -63,7 +67,13 @@ const CurrentGameCard = ({
   const checkYourTurn = () => {
     return game.currentPlayer.id === userID; 
   }
-  const classes = useStyles({ yourTurn: checkYourTurn(), started: game.started, playerNum: game.players.length });
+
+  const classes = useStyles({
+    yourTurn: checkYourTurn(),
+    started: game.started,
+    playerNum: game.players.length,
+    youAreOwner: game.owner.ownerID !== userID,
+  });
 
   const getOpponentName = () => {
     const opponentName = game.players.filter((player) => player.id !== userID)[0];
@@ -90,10 +100,10 @@ const CurrentGameCard = ({
     let text;
     if (!game.started) {
       text = game.players.length === 1 || game.owner.ownerID !== userID ? 'Waiting' : 'Ready';
-    } else if (checkYourTurn) {
-      text = 'Your Turn'
+    } else if (checkYourTurn()) {
+      text = "Your Turn";
     } else {
-      text = "Opponent's Turn"
+      text = "Opponent's Turn";
     }
     return (
       <Typography className={classes.cardState} variant='h5'>

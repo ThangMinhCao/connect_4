@@ -55,7 +55,7 @@ const RoomUseStyles = makeStyles((theme) => ({
   },
 
   currentGameList: {
-    height: '200px',
+    height: '230px',
     overflow: 'auto',
     background: 'transparent',
   },

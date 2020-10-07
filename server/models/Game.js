@@ -27,7 +27,7 @@ const gameSchema = new mongoose.Schema({
 
   players: [{
     id: String,
-    username: String
+    username: String,
   }],
 
   password: {
@@ -40,14 +40,21 @@ const gameSchema = new mongoose.Schema({
   },
 
   currentPlayer: {
-    type: {
-      id: String,
-      username: String,
-    },
+    type: Object,
     default: {
       id: '',
       username: '',
     }
+  },
+
+  ended: {
+    type: Boolean,
+    default: false,
+  },
+
+  winner: {
+    type: String,
+    default: '',
   },
 
   movesOccured: {

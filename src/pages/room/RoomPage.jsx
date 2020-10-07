@@ -22,6 +22,7 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
   // const [chosenUser, setChosenUser] = useState(null);
   const [roomList, setRoomList] = useState([]);
   const [drawerOpened, setDrawerOpened] = useState(false);
+  const [currentGames, setCurrentGames] = useState([]);
   const classes = RoomUseStyle();
 
   const history = useHistory();
@@ -41,7 +42,19 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
         console.log('An error occurs: ', err);
       }
     }
+    const getCurrentGames = async () => {
+      try {
+        await server_api.get(ENDPOINTS.getCurrentGames, {
+          headers: {
+            token: localStorage.getItem('account_token')
+          }
+        });
+      } catch (err) {
+        console.log('An error occurs:', err.response)    
+      }
+    }
     getAllGames();
+    getCurrentGames();
 
     socket.on('allGames', (data) => {
       setRoomList(data)
@@ -50,6 +63,15 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
       socket.removeAllListeners('allGames');
     }
   }, [])
+
+  useEffect(() => {
+    socket.on(`currentGames#${userID}`, (data) => {
+      setCurrentGames(data);
+    });
+    return () => {
+      socket.removeAllListeners(`currentGames#${userID}`);
+    }
+  }, [userID, socket])
 
   return (
     <div className={classes.page}>
@@ -74,8 +96,16 @@ const RoomPage = ({ socket, userID, username, onChooseRoom }) => {
           className={classes.drawer}
         />
         <div className={classes.content}>
-          <CurrentGameList socket={socket} userID={userID} onChooseRoom={onChooseRoom} />
-          <RoomList onChooseRoom={onChooseRoom} roomList={roomList} userID={userID} />
+          <CurrentGameList
+            userID={userID}
+            onChooseRoom={onChooseRoom}
+            currentGames={currentGames}
+          />
+          <RoomList
+            onChooseRoom={onChooseRoom}
+            roomList={roomList}
+            userID={userID}
+          />
           <Fab
             className={classes.addButton}
             onClick={() => setDialogOpened(true)}

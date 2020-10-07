@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   headerText: {
     justifyContent: 'center',
     fontFamily: '"Press Start 2P", cursive',
-    fontSize: 'calc(7vw + 2vh)',
+    fontSize: 'calc(5vw + 2vh)',
     color: '#F3D34A',
   },
 
@@ -58,7 +58,7 @@ const useStyles = makeStyles({
 
   buttonText: {
     fontFamily: '"Press Start 2P", cursive',
-    fontSize: 'calc(2vw + 2vh)',
+    fontSize: 'calc(2vw + 1vh)',
   },
 });
 
@@ -100,6 +100,14 @@ const StartGameDialog = ({ game, userID }) => {
     }
   }
 
+  const renderButtonText = () => {
+    if (checkedButtonAvailable()) {
+      return 'START GAME';
+    } else {
+      return game.owner.ownerID === userID ? 'WAITING FOR PLAYER' : 'WAITING FOR ROOM OWNER'
+    }
+  }
+
   const renderDialog = () => {
     if (!game) return <div />;
     return (
@@ -120,7 +128,7 @@ const StartGameDialog = ({ game, userID }) => {
             onClick={handleStartGame}
           >
             <Typography variant="h4" className={classes.buttonText}>
-              {checkedButtonAvailable() ? 'START GAME' : 'WAITING'}
+              {renderButtonText()}
             </Typography>
           </Button>
         </div>

@@ -1,40 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Paper from '@material-ui/core/Paper';
 import CurrentGameCard from './CurrentGameCard';
 import RoomUseStyle from './RoomPage-style';
-import server_api from '../../api/server_api';
-import ENDPOINTS from '../../constants/endpoints';
 
-const CurrentGameList = ({ socket, userID }) => {
+const CurrentGameList = ({ userID, currentGames }) => {
   const classes = RoomUseStyle();
-  const [currentGames, setCurrentGames] = useState([]);
-
-  useEffect(() => {
-    const getCurrentGames = async () => {
-      try {
-        await server_api.get(ENDPOINTS.getCurrentGames, {
-          headers: {
-            token: localStorage.getItem('account_token')
-          }
-        });
-      } catch (err) {
-        console.log('An error occurs:', err.response)    
-      }
-    }
-    getCurrentGames();
-  }, [])
-
-  useEffect(() => {
-    socket.on(`currentGames#${userID}`, (data) => {
-      // console.log(data);
-      setCurrentGames(data);
-    });
-    return () => {
-      socket.removeAllListeners(`currentGames#${userID}`);
-    }
-  }, [userID, socket])
 
   const listComparator = (game1, game2) => {
     if (game1.started && !game2.started) return -1;
@@ -45,23 +17,46 @@ const CurrentGameList = ({ socket, userID }) => {
   }
 
   return (
-    <Paper elevation={0} className={classes.currentGameList}>
-      <List className={classes.list} cols={6}>
-        {
-          currentGames
-            .sort(listComparator)
-            .map((game) => (
-              <ListItem className={classes.item} key={game.id}>
-                <CurrentGameCard
-                  game={game}
-                  userID={userID}
-                />
-              </ListItem>
+    <>
+      <Paper elevation={0} className={classes.currentGameList}>
+        <span>Started Current Games</span>
+        <List className={classes.list} cols={6}>
+          {
+            currentGames
+              .filter(game => game.started)
+              .sort(listComparator)
+              .map((game) => (
+                <ListItem className={classes.item} key={game.id}>
+                  <CurrentGameCard
+                    game={game}
+                    userID={userID}
+                  />
+                </ListItem>
+              )
             )
-          )
-        }
-      </List>
-    </Paper>
+          }
+        </List>
+      </Paper>
+      <Paper elevation={0} className={classes.currentGameList}>
+        <span>Not Started Games</span>
+        <List className={classes.list} cols={6}>
+          {
+            currentGames
+              .filter(game => !game.started)
+              .sort(listComparator)
+              .map((game) => (
+                <ListItem className={classes.item} key={game.id}>
+                  <CurrentGameCard
+                    game={game}
+                    userID={userID}
+                  />
+                </ListItem>
+              )
+            )
+          }
+        </List>
+      </Paper>
+    </>
   )
 }
 

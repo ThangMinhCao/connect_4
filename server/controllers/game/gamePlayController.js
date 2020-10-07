@@ -10,10 +10,100 @@ const move = (board, column, playerCode) => {
   for (let i = boardSize[1] - 1; i >= 0; i--) {
     if (board[i][column] === 0) {
       board[i][column] = playerCode;
-      return true;
+      return { successful: true, position: [i, column] };
     }
   }
-  return false;
+  return { successful: false, position: null };
+}
+
+const emitCurrentGames = async (userID, socket) => {
+  const foundUser = await User.findOne({ id: userID });
+  const ownerCurrentGameIDs = foundUser.currentGames;
+  const ownerCurrentGames = await Game.find({
+    "id": {
+      "$in": ownerCurrentGameIDs,
+    }
+  })
+  socket.emit(`currentGames#${userID}`, ownerCurrentGames);
+};
+
+const checkVertical = (board, i, j, playerCode) => {
+  let discNum = 0;
+  for (let r = i; r >= 0; r--) {
+    if (board[r][j] !== playerCode) {
+      break;
+    }
+    discNum++;
+  }
+  for (let r = i; r < board.length; r++) {
+    if (board[r][j] !== playerCode) {
+      break;
+    }
+    discNum++;
+  }
+  return discNum - 1 >= 4;
+}
+
+const checkHorizontal = (board, i, j, playerCode) => {
+  let discNum = 0;
+  for (let c = j; c >= 0; c--) {
+    if (board[i][c] !== playerCode) {
+      break;
+    }
+    discNum++;
+  }
+  for (let c = j; c < board[0].length; c++) {
+    if (board[i][c] !== playerCode) {
+      break;
+    }
+    discNum++;
+  }
+  return discNum - 1 >= 4;
+}
+
+const checkDiagonalTopRight = (board, i, j, playerCode) => {
+  let discNum = 0;
+  let [upI, downI, rightJ, leftJ] = [i, i, j, j];
+  while (upI >= 0 && rightJ < board[0].length && board[upI][rightJ] === playerCode) {
+     discNum++;
+     upI--;
+     rightJ++;
+  }
+  while (downI < board.length && leftJ >= 0 && board[downI][leftJ] === playerCode) {
+     discNum++;
+     downI++;
+     leftJ--;
+  }
+  return discNum - 1 >= 4;
+}
+const checkDiagonalTopLeft = (board, i, j, playerCode) => {
+  let discNum = 0;
+  let [upI, downI, rightJ, leftJ] = [i, i, j, j];
+  while (upI >= 0 && leftJ >= 0 && board[upI][leftJ] === playerCode) {
+     discNum++;
+     upI--;
+     leftJ--;
+  }
+  while (downI < board.length && rightJ < board[0].length && board[downI][rightJ] === playerCode) {
+     discNum++;
+     downI++;
+     rightJ++;
+  }
+  return discNum - 1 >= 4;
+}
+
+const checkGameEnd = (board, lastMovePosition) => {
+  const [i, j] = lastMovePosition; 
+  const lastMoveCode = board[i][j];
+  return checkVertical(board, i, j, lastMoveCode)
+      || checkHorizontal(board, i, j, lastMoveCode)
+      || checkDiagonalTopLeft(board, i, j, lastMoveCode)
+      || checkDiagonalTopRight(board, i, j, lastMoveCode);
+}
+
+const checkFullBoard = (board) => {
+  console.log(board[0][0]);
+  return !board.some(row => row.includes(0));
 }
 
 const playAMove = async (request, response) => {
@@ -24,10 +114,12 @@ const playAMove = async (request, response) => {
     if (!foundBoard) throw 'Board not available.';
     const foundGame = await Game.findOne({ id: roomID });
     if (!foundGame.started) throw 'This game is not started yet!';
-    const playerCode = foundGame.players.indexOf(playerID) + 1;
+
+    const playerCode = foundGame.players.map(p => p.id).indexOf(playerID) + 1;
 
     const newBoard = foundBoard.board;
-    if (!move(newBoard, column, playerCode)){
+    const lastMove = move(newBoard, column, playerCode);
+    if (!lastMove.successful){
       response.json({
         message: "That column is full.",
       })
@@ -38,10 +130,38 @@ const playAMove = async (request, response) => {
       "$set" : { "board": newBoard }
     })
 
+    const opponent = foundGame.players.filter(player => player.id !== playerID)[0];
     const updatedGame = await Game.findOneAndUpdate({ id: roomID }, {
-      "$inc": { "movesOccured": 1 }
-    })
-    request.app.get('socketio').emit(`game#${roomID}`, {
+      "$inc": { "movesOccured": 1 },
+      "$set": { "currentPlayer": opponent }
+    }, {useFindAndModify: false, new: true})
+    const socket = request.app.get('socketio');
+    emitCurrentGames(opponent.id, socket)
+
+    if (checkFullBoard(newBoard)) {
+      await Game.updateOne({ id: roomID }, {
+        "$set": {
+          "ended": true,
+        }
+      })
+      updatedGame.ended = true;
+    } else if (checkGameEnd(newBoard, lastMove.position)) {
+      await Game.updateOne({ id: roomID }, {
+        "$set": {
+          "ended": true,
+          "winner": playerID
+        }
+      })
+      updatedGame.ended = true;
+      updatedGame.winner = playerID;
+    }
+    if (updatedGame.ended) {
+      await User.updateMany({ currentGames: roomID }, {
+        "$pull": { currentGames: roomID}
+      })
+    }
+
+    socket.emit(`game#${roomID}`, {
       game: updatedGame, 
       board: newBoard
     });
