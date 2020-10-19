@@ -39,14 +39,14 @@ const useStyles = makeStyles({
   titleText: {
     flex: 1,
     paddingLeft: 'calc(1.2vw + 1.2vh)',
-    fontSize: '3.6vw',
+    fontSize: 'calc(1.5vw + 1.5vh)',
     fontWeight: 'bolder',
   },
 
   summary: {
     display: 'flex',
     flexDirection: 'column',
-    fontSize: 'calc(1vw + 0.6vh)',
+    fontSize: 'calc(0.8vw + 0.6vh)',
     alignItems: 'end',
   },
 

@@ -117,7 +117,11 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
             )}
           />
         </div>
-        <FriendListMenu iconClassName={internalClasses.profileIcon} />
+        <FriendListMenu
+          userID={userID}
+          iconClassName={internalClasses.profileIcon}
+          socket={socket}
+        />
       </Toolbar>
       <UserInfoDialog ref={userDialogRef} user={chosenUser} currentUserID={userID} />
     </AppBar>

@@ -91,14 +91,24 @@ const getAllUsers = async (request, response) => {
 const getFriendList = async (request, response) => {
   try {
     const userID = request.userID;
-    const friendIDList = await User.findOne({ id: userID }).friends;
+    const user = await User.findOne({ id: userID });
     const friendList = await User.find({
-      'id': { "$in": friendIDList }
+      'id': { "$in": user.friends }
     });
-    request.app.get('socketio').to(request.app.get('socketID')).emit('friendList', friendList);
-    // response.json({
-    //   users,
-    // })
+    request.app.get('socketio').emit(`friendList#${userID}`, friendList);
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
+const getFriendRequests = async (request, response) => {
+  try {
+    const userID = request.userID;
+    const user = await User.findOne({ id: userID });
+    const requests = await User.find({
+      'id': { "$in": user.comingFriendRequests }
+    });
+    request.app.get('socketio').emit(`friendRequests#${userID}`, requests);
   } catch (err) {
     response.status(400).send(err);
   }
@@ -172,17 +182,61 @@ const acceptFriendRequest = async (request, response) => {
     const userID = request.userID;
 
     await User.updateOne({ id: targetID }, {
-      "$pull": {"comingFriendRequests": userID},
+      "$pull": {"sentFriendRequests": userID},
       "$push": {"friends": userID}
     })
 
     await User.updateOne({ id: userID }, {
-      "$pull": {"sentFriendRequests": targetID},
+      "$pull": {"comingFriendRequests": targetID},
       "$push": {"friends": targetID}
     })
 
+    getFriendList(request, response);
+    getFriendRequests(request, response);
     response.json({
       message: "Friend accepted!",
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
+const rejectFriendRequest = async (request, response) => {
+  try {
+    const { targetID } = request.body;
+    const userID = request.userID;
+
+    await User.updateOne({ id: targetID }, {
+      "$pull": {"sentFriendRequests": userID},
+    })
+
+    await User.updateOne({ id: userID }, {
+      "$pull": {"comingFriendRequests": targetID},
+    })
+
+    response.json({
+      message: "Friend request rejected!",
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
+const cancelFriendRequest = async (request, response) => {
+  try {
+    const { targetID } = request.body;
+    const userID = request.userID;
+
+    await User.updateOne({ id: targetID }, {
+      "$pull": {"comingFriendRequests": userID},
+    })
+
+    await User.updateOne({ id: userID }, {
+      "$pull": {"sentFriendRequests": targetID},
+    })
+
+    response.json({
+      message: "Friend request rejected!",
     })
   } catch (err) {
     response.status(400).send(err);
@@ -196,6 +250,9 @@ module.exports = {
   getAllUsers,
   getUserFromToken,
   getFriendList,
+  getFriendRequests,
   sendFriendRequest,
   acceptFriendRequest,
+  cancelFriendRequest,
+  rejectFriendRequest,
 }

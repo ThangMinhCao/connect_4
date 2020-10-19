@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import GroupIcon from '@material-ui/icons/Group';
+import CloseIcon from '@material-ui/icons/Close';
+import CheckIcon from '@material-ui/icons/Check';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
@@ -21,6 +23,9 @@ const FriendListUseStyles = makeStyles({
     paddingLeft: 15,
     fontFamily: FONTS.pixel,
     fontSize: 15,
+    maxWidth: 220,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
 
   avatar: {
@@ -53,43 +58,24 @@ const FriendListUseStyles = makeStyles({
   },
 })
 
-const FriendListMenu = ({ userID, iconClassName }) => {
+const FriendListMenu = ({ userID, iconClassName, socket }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   /* eslint-disable */
-  const [friendList, setFriendList] = useState([
-    {
-      username: 'Friend1',
-      userID: 1251275918,
-      online: true,
-    },
-    {
-      username: 'Friend2',
-      userID: 1251275918,
-      online: true,
-    },
-    {
-      username: 'Friend3',
-      userID: 1251275918,
-      online: false,
-    },
-    {
-      username: 'Friend4',
-      userID: 1251275918,
-      online: true,
-    },
-    {
-      username: 'Friend4',
-      userID: 1251275918,
-      online: true,
-    },
-  ]);
+  const [friendList, setFriendList] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
   const classes = FriendListUseStyles();
 
   useEffect(() => {
-    const getFriendList = async() => {
+    const getFriendListAndRequests = async() => {
       try {
         // TODO
-        const response = server_api.get(ENDPOINTS.getFriendList, {
+        server_api.get(ENDPOINTS.getFriendList, {
+          headers: {
+            token: localStorage.getItem('account_token'),
+          }
+        });
+
+        server_api.get(ENDPOINTS.getFriendRequests, {
           headers: {
             token: localStorage.getItem('account_token'),
           }
@@ -98,8 +84,37 @@ const FriendListMenu = ({ userID, iconClassName }) => {
         console.log(err.response.data.message);
       }
     } 
-    getFriendList()    
-  }, []);
+    getFriendListAndRequests()    
+
+    socket.on(`friendList#${userID}`, (data) => {
+      setFriendList(data)
+    });
+    socket.on(`friendRequests#${userID}`, (data) => {
+      setFriendRequests(data)
+    });
+    return () => {
+      socket.removeAllListeners(`friendList#${userID}`);
+      socket.removeAllListeners(`friendRequests#${userID}`);
+    }
+  }, [userID]);
+
+  const handleAcceptFriendRequest = (requestUserID) => {
+    try {
+      // TODO
+      server_api.post(ENDPOINTS.acceptFriendRequest, 
+        {
+          targetID: requestUserID
+        },
+        {
+          headers: {
+            token: localStorage.getItem('account_token'),
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -120,9 +135,37 @@ const FriendListMenu = ({ userID, iconClassName }) => {
       return(
         friendList.sort((friend1, friend2) => friend2.online - friend1.online).map((friend, index) => (
           <MenuItem key={index} className={classes.friendItem}>
-            <Avatar className={classes.avatar}>F{index+1}</Avatar>
+            <Avatar className={classes.avatar}>{friend.username[0].toUpperCase()}</Avatar>
             <span className={classes.username}>{friend.username}</span>
             <div className={`${classes.sign} ${friend.online ? classes.online : classes.offline}`}></div>
+          </MenuItem>
+        ))
+      )
+    }
+  }
+
+  const renderFriendRequests = () => {
+    if (!friendRequests.length) {
+      return (
+        <MenuItem disabled className={classes.friendItem}>
+          No coming friend requests 
+        </MenuItem>
+      )
+    } else {
+      return(
+        friendRequests.map((request, index) => (
+          <MenuItem button={false} key={index} className={classes.friendItem}>
+            <Avatar className={classes.avatar}>{request.username[0].toUpperCase()}</Avatar>
+            <span className={classes.username}>{request.username}</span>
+            <IconButton
+              style={{ color: 'green' }}
+              onClick={() => handleAcceptFriendRequest(request.id)}
+            >
+              <CheckIcon />
+            </IconButton>
+            <IconButton style={{ color: 'red' }}>
+              <CloseIcon />
+            </IconButton>
           </MenuItem>
         ))
       )
@@ -152,6 +195,8 @@ const FriendListMenu = ({ userID, iconClassName }) => {
           horizontal: 'center'
         }}
       >
+        <div className={classes.title}>Friend requests</div>
+        {renderFriendRequests()}
         <div className={classes.title}>Friend list</div>
         {renderFriendList()}
       </Menu>

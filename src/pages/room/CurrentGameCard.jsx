@@ -65,7 +65,6 @@ const CurrentGameCard = ({
   const history = useHistory();
 
   const checkYourTurn = () => {
-    console.log(game.players);
     return game.currentPlayer.id === userID; 
   }
 

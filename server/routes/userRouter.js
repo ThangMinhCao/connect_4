@@ -8,8 +8,11 @@ router.put('/logout', auth.verifyToken, userController.logout);
 router.get('/verifyUser', auth.verifyToken, userController.getUserFromToken);
 router.get('/', userController.getAllUsers);
 router.get('/friendList', auth.verifyToken, userController.getFriendList);
+router.get('/friendRequests', auth.verifyToken, userController.getFriendRequests);
 router.post('/sendFriendRequest', auth.verifyToken, userController.sendFriendRequest);
-router.patch('/acceptFriendRequest', auth.verifyToken, userController.acceptFriendRequest);
+router.post('/acceptFriendRequest', auth.verifyToken, userController.acceptFriendRequest);
+router.post('/cancelFriendRequest', auth.verifyToken, userController.cancelFriendRequest);
+router.post('/rejectFriendRequest', auth.verifyToken, userController.rejectFriendRequest);
 
 // router.get('/:id', )
 

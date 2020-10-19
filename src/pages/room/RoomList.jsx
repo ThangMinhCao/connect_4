@@ -164,7 +164,8 @@ const RoomList = ({ roomList, userID }) => {
           return true;
         })
         // TODO
-        .sort((room1, room2) => room1.started - room2.started)
+        .sort((room1, room2) =>
+          generateTooltips(room1).buttonDisabled - generateTooltips(room2).buttonDisabled)
         .map((room) => (
           <div key={room.id}>
             <ListItem
