@@ -14,8 +14,8 @@ const io = socketio(server, { transports: ['polling'] });
 const PORT = process.env.PORT || 4000;
 
 app.set('socketio', io);
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'client', 'build', '../public/index.html'));
+app.get((req, res) => {
+  res.sendFile(path.resolve(__dirname, '../build' , 'index.html'));
 });
 
 // parse json from request's body

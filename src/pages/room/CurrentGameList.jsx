@@ -13,7 +13,7 @@ const CurrentGameList = ({ userID, currentGames }) => {
   }
 
   const checkReady = (game) => {
-    return game.players.length === 2; 
+    return game.players.length === 2 && game.owner.ownerID === userID; 
   }
 
   // const listComparator = (game1, game2) => {
