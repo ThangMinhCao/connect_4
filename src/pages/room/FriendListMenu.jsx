@@ -116,6 +116,24 @@ const FriendListMenu = ({ userID, iconClassName, socket }) => {
     }
   }
 
+  const handleCancelFriendRequest = (requestUserID) => {
+    try {
+      // TODO
+      server_api.post(ENDPOINTS.cancelFriendRequest, 
+        {
+          targetID: requestUserID
+        },
+        {
+          headers: {
+            token: localStorage.getItem('account_token'),
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  }
+
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
   }
@@ -163,7 +181,10 @@ const FriendListMenu = ({ userID, iconClassName, socket }) => {
             >
               <CheckIcon />
             </IconButton>
-            <IconButton style={{ color: 'red' }}>
+            <IconButton
+              style={{ color: 'red' }}
+              onClick={() => cancelFriendRequest}
+            >
               <CloseIcon />
             </IconButton>
           </MenuItem>

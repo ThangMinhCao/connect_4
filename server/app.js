@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { connectDB, dbURI } = require('./database/mongodb');
+const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
@@ -13,6 +14,9 @@ const io = socketio(server, { transports: ['polling'] });
 const PORT = process.env.PORT || 4000;
 
 app.set('socketio', io);
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 // parse json from request's body
 app.use(bodyParser.urlencoded({ extended: false }));

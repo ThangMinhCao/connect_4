@@ -214,6 +214,7 @@ const rejectFriendRequest = async (request, response) => {
       "$pull": {"comingFriendRequests": targetID},
     })
 
+    getFriendRequests(request, response);
     response.json({
       message: "Friend request rejected!",
     })
