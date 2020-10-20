@@ -127,6 +127,7 @@ const RoomList = ({ roomList, userID }) => {
         pathname: '/ingame',
         state: { roomID }
       });
+      history.go(0);
       console.log(response.data.message);
     } catch (err) {
       console.log('Error: ', err.response.data);  

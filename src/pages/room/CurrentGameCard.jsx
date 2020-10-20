@@ -94,6 +94,7 @@ const CurrentGameCard = ({
       pathname: '/ingame',
       state: { roomID: game.id }
     });
+    history.go(0);
   }
 
   const renderGameState = () => {

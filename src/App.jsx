@@ -45,6 +45,10 @@ const App = () => {
     }
     verifyUser();
 
+    window.onpopstate = function(event) {
+      window.location.reload();
+    };
+
     window.addEventListener('beforeunload', (event) => {
       event.preventDefault();
       // event.returnValue = '';
