@@ -1,6 +1,10 @@
-const router = require('express').Router();
-const userController = require('../controllers/user/userController');
-const auth = require('../middlewares/userAuth'); 
+"use strict";
+
+var router = require('express').Router();
+
+var userController = require('../controllers/user/userController');
+
+var auth = require('../middlewares/userAuth');
 
 router.post('/login', userController.login);
 router.post('/signup', userController.signup);
@@ -13,8 +17,6 @@ router.post('/sendFriendRequest', auth.verifyToken, userController.sendFriendReq
 router.post('/acceptFriendRequest', auth.verifyToken, userController.acceptFriendRequest);
 router.post('/cancelFriendRequest', auth.verifyToken, userController.cancelFriendRequest);
 router.post('/rejectFriendRequest', auth.verifyToken, userController.rejectFriendRequest);
-router.post('/unfriend', auth.verifyToken, userController.unfriend);
-
-// router.get('/:id', )
+router.post('/unfriend', auth.verifyToken, userController.unfriend); // router.get('/:id', )
 
 module.exports = router;

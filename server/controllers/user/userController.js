@@ -8,7 +8,6 @@ const uuid = require('shortid');
 const signup = async (request, response) => {
   try {
     const { username, public, password } = request.body;
-    //TODO encode password
     const availableUser = await User.findOne({ username: username });
     if (availableUser) {
       throw 'Given username is already taken.';
@@ -164,6 +163,12 @@ const sendFriendRequest = async (request, response) => {
         "sentFriendRequests": targetID,
       }
     })
+
+    const targetRequests = await User.find({
+      'id': { "$in": [...target.comingFriendRequests, userID] }
+    });
+    request.app.get('socketio').emit(`friendRequests#${targetID}`, targetRequests);
+
     const users = (await User.find()).filter((user) => user.public);
     request.app.get('socketio').emit('allUsers', users);
     response.json({
@@ -193,6 +198,8 @@ const acceptFriendRequest = async (request, response) => {
 
     getFriendList(request, response);
     getFriendRequests(request, response);
+    const users = (await User.find()).filter((user) => user.public);
+    request.app.get('socketio').emit('allUsers', users);
     response.json({
       message: "Friend accepted!",
     })
@@ -215,6 +222,8 @@ const rejectFriendRequest = async (request, response) => {
     })
 
     getFriendRequests(request, response);
+    const users = (await User.find()).filter((user) => user.public);
+    request.app.get('socketio').emit('allUsers', users);
     response.json({
       message: "Friend request rejected!",
     })
@@ -236,8 +245,39 @@ const cancelFriendRequest = async (request, response) => {
       "$pull": {"sentFriendRequests": targetID},
     })
 
+    const users = (await User.find()).filter((user) => user.public);
+    request.app.get('socketio').emit('allUsers', users);
     response.json({
-      message: "Friend request rejected!",
+      message: "Friend request cancelled!",
+    })
+  } catch (err) {
+    response.status(400).send(err);
+  }
+}
+
+const unfriend = async (request, response) => {
+  try {
+    const { targetID } = request.body;
+    const userID = request.userID;
+
+    await User.updateOne({ id: targetID }, {
+      "$pull": {"friends": userID},
+    })
+
+    await User.updateOne({ id: userID }, {
+      "$pull": {"friends": targetID},
+    })
+
+    getFriendList(request, response);
+    const target = await User.findOne({ 'id': targetID });
+    const targetFriendList = await User.find({
+      'id': { "$in": target.friends }
+    });
+    request.app.get('socketio').emit(`friendList#${targetID}`, targetFriendList);
+    const users = (await User.find()).filter((user) => user.public);
+    request.app.get('socketio').emit('allUsers', users);
+    response.json({
+      message: "Unfriend successfully!",
     })
   } catch (err) {
     response.status(400).send(err);
@@ -256,4 +296,5 @@ module.exports = {
   acceptFriendRequest,
   cancelFriendRequest,
   rejectFriendRequest,
+  unfriend,
 }

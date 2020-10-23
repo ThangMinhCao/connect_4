@@ -87,6 +87,7 @@ const GameInfoDrawer = ({
       </div>
       <div className={classes.drawerInfo}>
         <Typography variant="h5" className={`${classes.text} ${classes.roomName}`}>
+          {/* eslint-disable-next-line  */}
           Room name: {roomName} // ID: {roomID}
         </Typography>
         <Typography variant="h5" className={`${classes.text} ${classes.drawerTextInfo}`}>

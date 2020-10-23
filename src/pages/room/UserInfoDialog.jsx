@@ -134,53 +134,67 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
       });
       handleClose();
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err);
     }
   }
 
-  // TODO
   const handleAcceptFriendRequest = async () => {
-    // console.log(currentUserID);
     try {
-      await server_api.post(ENDPOINTS.sendFriendRequest, {
+      await server_api.post(ENDPOINTS.acceptFriendRequest, {
         targetID: user.id,
       }, {
         headers: {
           token: localStorage.getItem('account_token')
         }
       });
+      handleClose();
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err);
     }
   }
 
-  // const handleRejectFriendRequest = async () => {
-  //   // console.log(currentUserID);
-  //   try {
-  //     await server_api.remove(ENDPOINTS.cancelFriendRequest, {
-  //       targetID: user.id,
-  //     }, {
-  //       headers: {
-  //         token: localStorage.getItem('account_token')
-  //       }
-  //     });
-  //   } catch (err) {
-  //     console.log(err.response.data.message);
-  //   }
-  // }
+  const handleRejectFriendRequest = async () => {
+    try {
+      await server_api.post(ENDPOINTS.rejectFriendRequest, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+      handleClose();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const handleCancelFriendRequest = async () => {
-    // console.log(currentUserID);
     try {
-      await server_api.remove(ENDPOINTS.cancelFriendRequest, {
+      await server_api.post(ENDPOINTS.cancelFriendRequest, {
         targetID: user.id,
       }, {
         headers: {
           token: localStorage.getItem('account_token')
         }
       });
+      handleClose();
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err);
+    }
+  }
+
+  const handleUnfriend = async () => {
+    try {
+      await server_api.post(ENDPOINTS.unfriend, {
+        targetID: user.id,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
+        }
+      });
+      handleClose();
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -195,7 +209,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={handleSendFriendRequest}
+          onClick={handleUnfriend}
         >
           Unfriend
         </Button>
@@ -213,7 +227,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={handleCancelFriendRequest}
+            onClick={handleRejectFriendRequest}
           >
             Reject friend request
           </Button>

@@ -14,6 +14,7 @@ const ENDPOINTS = {
   acceptFriendRequest: '/users/acceptFriendRequest',
   cancelFriendRequest: '/users/cancelFriendRequest',
   rejectFriendRequest: '/users/rejectFriendRequest',
+  unfriend: '/users/unfriend',
   playAMove: '/games/playAMove',
   startGame: '/games/startGame',
   getGame: '/games/getGame',

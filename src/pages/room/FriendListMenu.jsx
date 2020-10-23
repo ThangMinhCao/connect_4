@@ -98,12 +98,12 @@ const FriendListMenu = ({ userID, iconClassName, socket }) => {
     }
   }, [userID]);
 
-  const handleAcceptFriendRequest = (requestUserID) => {
+  const handleAcceptFriendRequest = (targetID) => {
     try {
       // TODO
       server_api.post(ENDPOINTS.acceptFriendRequest, 
         {
-          targetID: requestUserID
+          targetID
         },
         {
           headers: {
@@ -116,21 +116,18 @@ const FriendListMenu = ({ userID, iconClassName, socket }) => {
     }
   }
 
-  const handleCancelFriendRequest = (requestUserID) => {
+  const handleRejectFriendRequest = async (targetID) => {
     try {
-      // TODO
-      server_api.post(ENDPOINTS.cancelFriendRequest, 
-        {
-          targetID: requestUserID
-        },
-        {
-          headers: {
-            token: localStorage.getItem('account_token'),
-          },
+      await server_api.post(ENDPOINTS.rejectFriendRequest, {
+        targetID,
+      }, {
+        headers: {
+          token: localStorage.getItem('account_token')
         }
-      );
+      });
+      handleClose();
     } catch (err) {
-      console.log(err.response.data.message);
+      console.log(err);
     }
   }
 
@@ -183,7 +180,7 @@ const FriendListMenu = ({ userID, iconClassName, socket }) => {
             </IconButton>
             <IconButton
               style={{ color: 'red' }}
-              onClick={() => cancelFriendRequest}
+              onClick={() => handleRejectFriendRequest(request.id)}
             >
               <CloseIcon />
             </IconButton>
