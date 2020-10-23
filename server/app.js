@@ -30,6 +30,7 @@ connectDB();
 require('./models/User');
 require('./models/Game');
 require('./models/Board');
+require('./models/Messages');
 
 // routes
 app.use("/users", require("./routes/userRouter"));

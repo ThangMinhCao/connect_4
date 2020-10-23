@@ -1,7 +1,9 @@
+const { Message } = require('@material-ui/icons');
 const mongoose = require('mongoose');
 const Game = mongoose.model('Game');
 const User = mongoose.model('User');
 const Board = mongoose.model('Board');
+const Messages = mongoose.model('Messages');
 const uuid = require('shortid');
 
 const boardSize = [7, 6];
@@ -156,7 +158,7 @@ const playAMove = async (request, response) => {
     }
     if (updatedGame.ended) {
       await User.updateMany({ currentGames: roomID }, {
-        "$pull": { currentGames: roomID}
+        "$pull": { currentGames: roomID }
       })
     }
 
@@ -173,6 +175,44 @@ const playAMove = async (request, response) => {
   }
 }
 
+const getMessages = async (request, response) => {
+  try {
+    const { roomID } = request.query;
+    const messages = await Messages.findOne({ id: roomID });
+    if (!messages) throw 'The room doesn\'t exist';
+    const socket = request.app.get('socketio');
+    socket.emit(`messages#${roomID}`, {
+      messages: messages.messages
+    });
+  } catch (err) {
+    response.status(400).send(err); 
+  }
+}
+
+const sendMessage = async (request, response) => {
+  try {
+    const { roomID, message } = request.body;
+    const userID = request.userID;
+
+    const messages = await Messages.findOneAndUpdate({ id: roomID }, {
+      "$push": {
+        messages: {
+          sender: userID,
+          content: message
+        }
+      }
+    }, { useFindAndModify: false, new: true })
+    const socket = request.app.get('socketio');
+    socket.emit(`messages#${roomID}`, {
+      messages: messages.messages
+    });
+  } catch (err) {
+    response.status(400).send(err); 
+  }
+}
+
 module.exports = {
   playAMove,
+  getMessages,
+  sendMessage
 };

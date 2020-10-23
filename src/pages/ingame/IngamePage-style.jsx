@@ -15,7 +15,9 @@ const IngameUseStyle = makeStyles((theme) => ({
   },
 
   gameBoard: {
+    display: 'flex',
     flex: 1,
+    flexWrap: 'wrap',
     fontFamily: FONTS.pixel,
     width: '100vw',
     alignItems: 'center',

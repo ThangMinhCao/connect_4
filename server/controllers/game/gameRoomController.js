@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Game = mongoose.model('Game');
 const User = mongoose.model('User');
 const Board = mongoose.model('Board');
+const Messages = mongoose.model('Messages');
 const uuid = require('shortid');
 
 const boardSize = [7, 6];
@@ -47,6 +48,11 @@ const createNewRoom = async (request, response) => {
       public
     });
 
+    const messages = new Messages({
+      id: roomID,
+      messages: []
+    });
+
     const newBoard = new Board({
       id: roomID,
       board: initializeBoard(boardSize[0], boardSize[1]),
@@ -54,6 +60,7 @@ const createNewRoom = async (request, response) => {
 
     await gameRoom.save();
     await newBoard.save();
+    await messages.save();
     // console.log(await Board.findOne({id: roomID}));
     const games = await getAllPublicAvailableGames();
     const app = request.app;

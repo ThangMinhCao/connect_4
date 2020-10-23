@@ -11,5 +11,8 @@ router.put('/playAMove', auth.verifyToken, gamePlayController.playAMove);
 router.put('/startGame', auth.verifyToken, gameController.startGame);
 router.get('/getGame', auth.verifyToken, gameController.getGame);
 router.get('/current', auth.verifyToken, gameController.getCurrentGames);
+router.post('/sendMessage', auth.verifyToken, gamePlayController.sendMessage);
+router.get('/messages', auth.verifyToken, gamePlayController.getMessages);
+
 
 module.exports = router;

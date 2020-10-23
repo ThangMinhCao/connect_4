@@ -133,10 +133,6 @@ const UserDrawer = ({
       <Typography variant='h5' className={classes.drawerInfo}>
         Loses: {loseNumber} 
       </Typography>
-
-      <Typography variant='h5' className={classes.drawerInfo}>
-        Current: {currentGamesNumber} 
-      </Typography>
       <Tooltip title="Logout">
         <Button
           color="primary"

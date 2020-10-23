@@ -19,6 +19,8 @@ const ENDPOINTS = {
   startGame: '/games/startGame',
   getGame: '/games/getGame',
   getCurrentGames: '/games/current',
+  getMessages: '/games/messages',
+  sendMessages: '/games/sendMessage',
 }
 
 export default ENDPOINTS;
