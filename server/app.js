@@ -11,7 +11,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server, { transports: ['polling'] }); 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4001;
 
 app.set('socketio', io);
 app.get((req, res) => {
