@@ -206,12 +206,13 @@ const acceptFriendRequest = async (request, response) => {
     })
 
     getFriendList(request, response);
-    getFriendRequests(request, response);
+    const user = await User.findOne({ id: userID });
+    const requests = await User.find({
+      'id': { "$in": user.comingFriendRequests }
+    });
+    request.app.get('socketio').emit(`friendRequests#${userID}`, requests);
     const users = (await User.find()).filter((user) => user.public);
     request.app.get('socketio').emit('allUsers', users);
-    response.json({
-      message: "Friend accepted!",
-    })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -233,9 +234,6 @@ const rejectFriendRequest = async (request, response) => {
     getFriendRequests(request, response);
     const users = (await User.find()).filter((user) => user.public);
     request.app.get('socketio').emit('allUsers', users);
-    response.json({
-      message: "Friend request rejected!",
-    })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -285,9 +283,6 @@ const unfriend = async (request, response) => {
     request.app.get('socketio').emit(`friendList#${targetID}`, targetFriendList);
     const users = (await User.find()).filter((user) => user.public);
     request.app.get('socketio').emit('allUsers', users);
-    response.json({
-      message: "Unfriend successfully!",
-    })
   } catch (err) {
     response.status(400).send(err);
   }

@@ -68,7 +68,7 @@ const DrawerUseStyle = makeStyles({
 });
 
 const UserDrawer = ({
-  userID, username, victoryNumber, loseNumber, currentGamesNumber, open, setOpen
+  userID, username, victoryNumber, loseNumber, open, setOpen
 }) => {
   const classes = DrawerUseStyle();
   const history = useHistory();
@@ -125,14 +125,14 @@ const UserDrawer = ({
       <Typography className={classes.drawerUserName}>
         ID: {userID} 
       </Typography>
-
+{/* 
       <Typography variant='h5' className={classes.drawerInfo}>
         Wins: {victoryNumber} 
       </Typography>
 
       <Typography variant='h5' className={classes.drawerInfo}>
         Loses: {loseNumber} 
-      </Typography>
+      </Typography> */}
       <Tooltip title="Logout">
         <Button
           color="primary"

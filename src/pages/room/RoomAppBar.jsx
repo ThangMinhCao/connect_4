@@ -72,6 +72,9 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
         const res = await server_api.get(ENDPOINTS.getCurrentGamesInfo, {
           headers: {
             token: localStorage.getItem('account_token')
+          },
+          params: {
+            targetID: chosenUser.id
           }
         });
         setCurrentGames(res.data.games);
@@ -80,7 +83,9 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
       }
     }
 
-    getCurrentGames();
+    if (chosenUser) {
+      getCurrentGames();
+    }
     getAllUsers();
     socket.on('allUsers', (data) => {
       setAllPublicUsers(data)
@@ -88,7 +93,7 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
     return () => {
       socket.removeAllListeners('allUsers');
     }
-  }, [socket])
+  }, [socket, chosenUser])
 
   return (
     <AppBar position="fixed">

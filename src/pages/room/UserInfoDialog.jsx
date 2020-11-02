@@ -113,7 +113,9 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
   const classes = useStyles();
   const [opened, setOpened] = useState(false);
 
-  const handleClose = () => setOpened(false);
+  const handleClose = () => {
+    setOpened(false);
+  }
   const handleOpen = () => setOpened(true);
 
   const handleSendFriendRequest = async () => {
@@ -248,6 +250,15 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
       </Button>
     )
   }
+
+  const getVersusText = (game) => {
+    const playerFiltered = game.players.filter(player => player.id !== user.id);
+    return playerFiltered[0] ? playerFiltered[0].username : 'Waiting';
+  }
+
+  if (!currentGames) {
+    return <div />
+  }
   
   const renderDialog = () => {
     if (user) {
@@ -258,7 +269,8 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
           open={opened}
           PaperProps={{
             style: {
-              backgroundColor: COLORS.background
+              backgroundColor: COLORS.background,
+              height: 950
             }
           }}
           onClose={handleClose}
@@ -269,10 +281,10 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
               <span className={classes.titleText}>{user.username}</span>
               <span className={classes.summary}>
                 <span>
-                  <b>Game played</b>: 10
+                  <b>Game played</b>: {user.wins + user.loses}
                 </span>
                 <span>
-                  <b>Winrate</b>: 10%
+                  <b>Winrate</b>: { !user.wins ? 0 : !user.loses ? 100 : (user.wins / user.loses)}%
                 </span>
               </span>
             </div>
@@ -299,7 +311,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
                           </p>
 
                           <p className={classes.textVersus}>
-                            vs. {game.players.filter(player => player.id !== currentUserID)[0].username}
+                            vs. {getVersusText(game)}
                           </p>
 
                           <p className={classes.textVersus}>
@@ -320,7 +332,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
                 <span className={classes.bodyText}><b>Current Games</b></span>
                 <List className={classes.currentGameList}>
                   {
-                    currentGames.map((game, index) => (
+                    currentGames.filter(game => game.started).map((game, index) => (
                       <div key={index + user.id}>
                         <ListItem style={{ flexDirection: 'column', alignItems: 'flex-start' }} button>
                           <p className={classes.text}>
@@ -338,7 +350,7 @@ const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) =
                               ID: {game.id}
                             </p>
                             <p className={classes.textSmall}>
-                              Opponent: {game.players.filter(player => player.id !== user.id)[0].username} <br/>
+                              Opponent: {getVersusText(game)} <br/>
                             </p>
                           </div>
                         </ListItem>

@@ -1,0 +1,142 @@
+[{
+  "_id": {
+    "$oid": "5fa05fd4895b120ee58c84a5"
+  },
+  "id": "fkPA1miLw",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fd7895b120ee58c84a9"
+  },
+  "id": "ERIlbfr2t",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fdc895b120ee58c84ad"
+  },
+  "id": "EKcPbQHKN",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fe1895b120ee58c84b1"
+  },
+  "id": "azwCta0dr",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fe6895b120ee58c84b5"
+  },
+  "id": "B3cYoDr_s",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06002895b120ee58c84ba"
+  },
+  "id": "eF4i93Nyh",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06005895b120ee58c84be"
+  },
+  "id": "lgE4Udm2d",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06008895b120ee58c84c2"
+  },
+  "id": "_Sttf8jew",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa0600b895b120ee58c84c6"
+  },
+  "id": "Qu3vsTMrb",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa0600e895b120ee58c84ca"
+  },
+  "id": "MgCkH9KNX",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06974e7f6dde123754fbd"
+  },
+  "id": "JR2mMIYX9",
+  "messages": [
+    {
+      "_id": {
+        "$oid": "5fa06985e7f6dde123754fc4"
+      },
+      "sender": "QoBUB58o0",
+      "content": "hey]"
+    },
+    {
+      "_id": {
+        "$oid": "5fa0698ae7f6dde123754fc5"
+      },
+      "sender": "bustDC_GD",
+      "content": "let's play"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06978e7f6dde123754fc1"
+  },
+  "id": "caDYzk0Ix",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa069ebe7f6dde123754fc8"
+  },
+  "id": "6f6rHpPou",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a8ce7f6dde123754fd1"
+  },
+  "id": "BWsrutMOC",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a90e7f6dde123754fd5"
+  },
+  "id": "Kl4H5ndwq",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a94e7f6dde123754fd9"
+  },
+  "id": "vpo6U6dBV",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a9ee7f6dde123754fde"
+  },
+  "id": "G73m9P2w2",
+  "messages": [],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06aa4e7f6dde123754fe2"
+  },
+  "id": "U-PH80t2n",
+  "messages": [],
+  "__v": 0
+}]

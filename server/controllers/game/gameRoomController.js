@@ -117,9 +117,6 @@ const joinGame = async (request, response) => {
 
     emitCurrentGames(game.owner.ownerID, app.get('socketio'));
     getGame(request, response);
-    response.json({
-      message: 'Join game successfully!',
-    })
     // request.app.get('socketio').emit('allGames', games);
   } catch (err) {
     response.status(400).send({ message: err });
@@ -192,7 +189,8 @@ const getCurrentGames = async (request, response) => {
 
 const getCurrentGamesInfo = async (request, response) => {
   try {
-    const foundUser = await User.findOne({ id: request.userID });
+    const { targetID } = request.query; 
+    const foundUser = await User.findOne({ id: targetID });
     const ownerCurrentGameIDs = foundUser.currentGames;
     const ownerCurrentGames = await Game.find({
       "id": {

@@ -1,0 +1,607 @@
+[{
+  "_id": {
+    "$oid": "5fa05fd4895b120ee58c84a3"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "apple's game 1",
+  "id": "fkPA1miLw",
+  "owner": {
+    "ownerID": "xgq0vEv7l",
+    "ownerName": "apple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa05fd4895b120ee58c84a4"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fd7895b120ee58c84a7"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "apple's game 2",
+  "id": "ERIlbfr2t",
+  "owner": {
+    "ownerID": "xgq0vEv7l",
+    "ownerName": "apple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa05fd7895b120ee58c84a8"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fdc895b120ee58c84ab"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "apple's game 3",
+  "id": "EKcPbQHKN",
+  "owner": {
+    "ownerID": "xgq0vEv7l",
+    "ownerName": "apple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa05fdc895b120ee58c84ac"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06962e7f6dde123754fba"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fe1895b120ee58c84af"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "xgq0vEv7l",
+    "username": "apple"
+  },
+  "ended": true,
+  "winner": "bustDC_GD",
+  "movesOccured": 7,
+  "name": "apple's game 4",
+  "id": "azwCta0dr",
+  "owner": {
+    "ownerID": "xgq0vEv7l",
+    "ownerName": "apple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa05fe1895b120ee58c84b0"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06b49e1a57912d825414f"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa05fe6895b120ee58c84b3"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "apple's game 5",
+  "id": "B3cYoDr_s",
+  "owner": {
+    "ownerID": "xgq0vEv7l",
+    "ownerName": "apple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa05fe6895b120ee58c84b4"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06a70e7f6dde123754fcd"
+      },
+      "id": "Hhb8S0Run",
+      "username": "watermelon"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06002895b120ee58c84b8"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "xgq0vEv7l",
+    "username": "apple"
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 11,
+  "name": "mango's game 1",
+  "id": "eF4i93Nyh",
+  "owner": {
+    "ownerID": "QoBUB58o0",
+    "ownerName": "mango"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06002895b120ee58c84b9"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    },
+    {
+      "_id": {
+        "$oid": "5fa061dd895b120ee58c84cd"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06005895b120ee58c84bc"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "QoBUB58o0",
+    "username": "mango"
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "mango's game 2",
+  "id": "lgE4Udm2d",
+  "owner": {
+    "ownerID": "QoBUB58o0",
+    "ownerName": "mango"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06005895b120ee58c84bd"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    },
+    {
+      "_id": {
+        "$oid": "5fa061a6895b120ee58c84cc"
+      },
+      "id": "xgq0vEv7l",
+      "username": "apple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06008895b120ee58c84c0"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "QoBUB58o0",
+    "username": "mango"
+  },
+  "ended": true,
+  "winner": "bustDC_GD",
+  "movesOccured": 12,
+  "name": "mango's game 3",
+  "id": "_Sttf8jew",
+  "owner": {
+    "ownerID": "QoBUB58o0",
+    "ownerName": "mango"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06008895b120ee58c84c1"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06286895b120ee58c84cf"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa0600b895b120ee58c84c4"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "QoBUB58o0",
+    "username": "mango"
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 2,
+  "name": "mango's game 4",
+  "id": "Qu3vsTMrb",
+  "owner": {
+    "ownerID": "QoBUB58o0",
+    "ownerName": "mango"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa0600b895b120ee58c84c5"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    },
+    {
+      "_id": {
+        "$oid": "5fa069f9e7f6dde123754fca"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa0600e895b120ee58c84c8"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "mango's game 5",
+  "id": "MgCkH9KNX",
+  "owner": {
+    "ownerID": "QoBUB58o0",
+    "ownerName": "mango"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa0600e895b120ee58c84c9"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06974e7f6dde123754fbb"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "bustDC_GD",
+    "username": "pineapple"
+  },
+  "ended": true,
+  "winner": "",
+  "movesOccured": 42,
+  "name": "pineapple's game 1",
+  "id": "JR2mMIYX9",
+  "owner": {
+    "ownerID": "bustDC_GD",
+    "ownerName": "pineapple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06974e7f6dde123754fbc"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa0697ce7f6dde123754fc3"
+      },
+      "id": "QoBUB58o0",
+      "username": "mango"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06978e7f6dde123754fbf"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "pineapple's game 2",
+  "id": "caDYzk0Ix",
+  "owner": {
+    "ownerID": "bustDC_GD",
+    "ownerName": "pineapple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06978e7f6dde123754fc0"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06a96e7f6dde123754fdb"
+      },
+      "id": "RdL03v3ec",
+      "username": "orange"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa069ebe7f6dde123754fc6"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "bustDC_GD",
+    "username": "pineapple"
+  },
+  "ended": true,
+  "winner": "Hhb8S0Run",
+  "movesOccured": 9,
+  "name": "pineapple's game 3",
+  "id": "6f6rHpPou",
+  "owner": {
+    "ownerID": "bustDC_GD",
+    "ownerName": "pineapple"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa069ebe7f6dde123754fc7"
+      },
+      "id": "bustDC_GD",
+      "username": "pineapple"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06a4de7f6dde123754fcc"
+      },
+      "id": "Hhb8S0Run",
+      "username": "watermelon"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a8ce7f6dde123754fcf"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "RdL03v3ec",
+    "username": "orange"
+  },
+  "ended": true,
+  "winner": "Hhb8S0Run",
+  "movesOccured": 11,
+  "name": "orange's game 1",
+  "id": "BWsrutMOC",
+  "owner": {
+    "ownerID": "RdL03v3ec",
+    "ownerName": "orange"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06a8ce7f6dde123754fd0"
+      },
+      "id": "RdL03v3ec",
+      "username": "orange"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06ac8e7f6dde123754fe5"
+      },
+      "id": "Hhb8S0Run",
+      "username": "watermelon"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a90e7f6dde123754fd3"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "orange's game 3",
+  "id": "Kl4H5ndwq",
+  "owner": {
+    "ownerID": "RdL03v3ec",
+    "ownerName": "orange"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06a90e7f6dde123754fd4"
+      },
+      "id": "RdL03v3ec",
+      "username": "orange"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a94e7f6dde123754fd7"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "orange's game 2",
+  "id": "vpo6U6dBV",
+  "owner": {
+    "ownerID": "RdL03v3ec",
+    "ownerName": "orange"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06a94e7f6dde123754fd8"
+      },
+      "id": "RdL03v3ec",
+      "username": "orange"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06a9ee7f6dde123754fdc"
+  },
+  "public": true,
+  "started": false,
+  "currentPlayer": {
+    "id": "",
+    "username": ""
+  },
+  "ended": false,
+  "winner": "",
+  "movesOccured": 0,
+  "name": "watermelon's game 1",
+  "id": "G73m9P2w2",
+  "owner": {
+    "ownerID": "Hhb8S0Run",
+    "ownerName": "watermelon"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06a9ee7f6dde123754fdd"
+      },
+      "id": "Hhb8S0Run",
+      "username": "watermelon"
+    }
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5fa06aa4e7f6dde123754fe0"
+  },
+  "public": true,
+  "started": true,
+  "currentPlayer": {
+    "id": "Hhb8S0Run",
+    "username": "watermelon"
+  },
+  "ended": true,
+  "winner": "RdL03v3ec",
+  "movesOccured": 13,
+  "name": "watermelon's game 2",
+  "id": "U-PH80t2n",
+  "owner": {
+    "ownerID": "Hhb8S0Run",
+    "ownerName": "watermelon"
+  },
+  "players": [
+    {
+      "_id": {
+        "$oid": "5fa06aa4e7f6dde123754fe1"
+      },
+      "id": "Hhb8S0Run",
+      "username": "watermelon"
+    },
+    {
+      "_id": {
+        "$oid": "5fa06aa7e7f6dde123754fe4"
+      },
+      "id": "RdL03v3ec",
+      "username": "orange"
+    }
+  ],
+  "__v": 0
+}]
