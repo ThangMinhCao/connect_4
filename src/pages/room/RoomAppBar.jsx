@@ -49,6 +49,7 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
   const internalClasses = AppBarUseStyles();
   const [allPublicUsers, setAllPublicUsers] = useState([]);
   const [chosenUser, setChosenUser] = useState(null);
+  const [currentGames, setCurrentGames] = useState(null);
   const userDialogRef = useRef();
 
   const handleChooseUser = (user) => {
@@ -65,6 +66,21 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
         console.log(err)
       }
     }
+
+    const getCurrentGames = async () => {
+      try {
+        const res = await server_api.get(ENDPOINTS.getCurrentGamesInfo, {
+          headers: {
+            token: localStorage.getItem('account_token')
+          }
+        });
+        setCurrentGames(res.data.games);
+      } catch (err) {
+        console.log('An error occurs:', err)    
+      }
+    }
+
+    getCurrentGames();
     getAllUsers();
     socket.on('allUsers', (data) => {
       setAllPublicUsers(data)
@@ -123,7 +139,7 @@ const RoomAppBar = ({ socket, setDrawerOpened, userID }) => {
           socket={socket}
         />
       </Toolbar>
-      <UserInfoDialog ref={userDialogRef} user={chosenUser} currentUserID={userID} />
+      <UserInfoDialog ref={userDialogRef} currentGames={currentGames} user={chosenUser} currentUserID={userID} />
     </AppBar>
   )
 } 

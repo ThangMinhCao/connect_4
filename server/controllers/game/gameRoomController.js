@@ -82,7 +82,7 @@ const getAllGames = async (request, response) => {
     })
     request.app.get('socketio').emit('allGames', games);
   } catch (err) {
-    response.status(400).send({ message: err });
+    response.status(400).json({ message: err });
   }
 };
 
@@ -148,6 +148,9 @@ const startGame = async (request, response) => {
     });
     const opponentID = foundGame.players.filter((player) => player.id !== request.userID)[0].id;
     await emitCurrentGames(opponentID, request.app.get('socketio'));
+    response.json({
+      message: 'Start game successfully!',
+    })
   } catch (err) {
     response.status(400).send({ message: err });
   }
@@ -168,6 +171,9 @@ const getGame = async (request, response) => {
   try {
     const { roomID } = request.query; 
     getCurrentGameInfo(roomID, request.app.get('socketio'));
+    response.json({
+      message: 'Get game info successfully!',
+    })
   } catch (err) {
     response.status(400).send({ message: err }); 
   }
@@ -176,6 +182,27 @@ const getGame = async (request, response) => {
 const getCurrentGames = async (request, response) => {
   try {
     emitCurrentGames(request.userID, request.app.get('socketio'));
+    response.json({
+      message: 'Get current games successfully!',
+    })
+  } catch (err) {
+    response.status(400).send({ message: err }); 
+  }
+}
+
+const getCurrentGamesInfo = async (request, response) => {
+  try {
+    const foundUser = await User.findOne({ id: request.userID });
+    const ownerCurrentGameIDs = foundUser.currentGames;
+    const ownerCurrentGames = await Game.find({
+      "id": {
+        "$in": ownerCurrentGameIDs,
+      }
+    })
+
+    response.json({
+      games: ownerCurrentGames
+    })
   } catch (err) {
     response.status(400).send({ message: err }); 
   }
@@ -188,4 +215,5 @@ module.exports = {
   startGame,
   getGame,
   getCurrentGames,
+  getCurrentGamesInfo
 };

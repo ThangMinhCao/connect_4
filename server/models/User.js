@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Mixed = mongoose.Schema.Types.Mixed;
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
   gameHistory: [{
     // array of room id
-    type: String,
+    type: Mixed,
   }],
 
   currentGames: [String],
@@ -40,6 +41,16 @@ const userSchema = new mongoose.Schema({
 
   comingFriendRequests: [String],
   sentFriendRequests: [String],
+
+  wins: {
+    type: Number,
+    default: 0,
+  },
+
+  loses: {
+    type: Number,
+    default: 0,
+  }
 });
 
 mongoose.model('User', userSchema);

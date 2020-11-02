@@ -155,10 +155,18 @@ const playAMove = async (request, response) => {
       })
       updatedGame.ended = true;
       updatedGame.winner = playerID;
+      await User.update({ id: playerID }, {
+        "$inc": { wins: 1 }
+      })
+
+      await User.update({ id: opponent.id }, {
+        "$inc": { loses: 1 }
+      })
     }
     if (updatedGame.ended) {
       await User.updateMany({ currentGames: roomID }, {
-        "$pull": { currentGames: roomID }
+        "$pull": { currentGames: roomID },
+        "$push": { gameHistory: updatedGame }
       })
     }
 
@@ -184,6 +192,9 @@ const getMessages = async (request, response) => {
     socket.emit(`messages#${roomID}`, {
       messages: messages.messages
     });
+    response.json({
+      message: "Get messages successfully",
+    })
   } catch (err) {
     response.status(400).send(err); 
   }
@@ -206,6 +217,9 @@ const sendMessage = async (request, response) => {
     socket.emit(`messages#${roomID}`, {
       messages: messages.messages
     });
+    response.json({
+      message: "Sent message successfully",
+    })
   } catch (err) {
     response.status(400).send(err); 
   }

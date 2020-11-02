@@ -46,6 +46,8 @@ const COLORS = {
     winHover: '#6CA054',
     lose: '#D36135',
     loseHover: '#B85128',
+    tie: '#FFC857',
+    tieHover: '#ffd582'
   }
 }
 

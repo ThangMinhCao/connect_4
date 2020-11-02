@@ -13,6 +13,7 @@ router.get('/getGame', auth.verifyToken, gameController.getGame);
 router.get('/current', auth.verifyToken, gameController.getCurrentGames);
 router.post('/sendMessage', auth.verifyToken, gamePlayController.sendMessage);
 router.get('/messages', auth.verifyToken, gamePlayController.getMessages);
+router.get('/currentGamesInfo', auth.verifyToken, gameController.getCurrentGamesInfo);
 
 
 module.exports = router;

@@ -28,6 +28,16 @@ const useStyles = makeStyles({
     fontFamily: FONTS.pixel,
   },
 
+  textSmall: {
+    fontSize: 'calc(0.6vw + 0.6vh)',
+    fontFamily: FONTS.pixel,
+  },
+
+  textVersus: {
+    fontSize: 'calc(0.7vw + 0.7vh)',
+    fontFamily: FONTS.pixel,
+  },
+
   avatar: {
     border: '5px solid white',
     height: 'calc(5vw + 1.2vh)',
@@ -79,48 +89,32 @@ const useStyles = makeStyles({
     }
   },
 
+  tieHistory: {
+    backgroundColor: COLORS.historyGame.tie,
+    '&:hover': {
+      backgroundColor: COLORS.historyGame.tieHover,
+    }
+  },
+
   currentGames: {
     paddingLeft: 20,
     flex: 2,
   },
 
   currentGameList: {
-    maxHeight: '45vh',
+    maxHeight: 700,
     overflow: 'auto',
-  }
+  },
 
 })
 
-const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
+const UserInfoDialog = forwardRef(({ user, currentUserID, currentGames }, ref) => {
   // const { user, currentUserID } = props;
   const classes = useStyles();
   const [opened, setOpened] = useState(false);
-  const history = [
-    {
-      name: 'Game 1',
-      win: true
-    },
-    {
-      name: 'Game 2',
-      win: false 
-    },
-    {
-      name: 'Game 3',
-      win: true
-    },
-    {
-      name: 'Game 4',
-      win: false 
-    },
-    {
-      name: 'Game 5',
-      win: true
-    },
-  ];
-  const currentGames = ['Game 1', 'Game 2', 'Game 3', 'Game 4', 'Game 5', 'Game 3', 'Game 4', 'Game 5'];
 
-  const  handleClose = () => setOpened(false);
-  const  handleOpen = () => setOpened(true);
+  const handleClose = () => setOpened(false);
+  const handleOpen = () => setOpened(true);
 
   const handleSendFriendRequest = async () => {
     // console.log(currentUserID);
@@ -287,17 +281,35 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
             <div className={classes.body}>
               <div className={classes.history}>
                 <span className={classes.bodyText}><b>History</b></span>
-                <List>
+                <List style={{ maxHeight: 700, overflow: 'auto' }}>
                   {
-                    history.map((game, index) => (
+                    user.gameHistory.map((game, index) => (
                       <ListItem
                         button
-                        className={game.win ? classes.winHistory : classes.loseHistory}
+                        className={
+                          game.winner === '' 
+                            ? classes.tieHistory
+                            : game.winner === user.id ? classes.winHistory : classes.loseHistory
+                        }
                         key={index}
                       >
-                        <p className={classes.text}>
-                          {game.name}
-                        </p>
+                        <div>
+                          <p className={classes.text}>
+                            {game.name}
+                          </p>
+
+                          <p className={classes.textVersus}>
+                            vs. {game.players.filter(player => player.id !== currentUserID)[0].username}
+                          </p>
+
+                          <p className={classes.textVersus}>
+                            {
+                              game.winner === ''
+                              ? "TIE"
+                              : game.winner === user.id ? "WIN" : "LOSE"
+                            }
+                          </p>
+                        </div>
                       </ListItem>
                     ))
                   }
@@ -309,11 +321,29 @@ const UserInfoDialog = forwardRef(({ user, currentUserID }, ref) => {
                 <List className={classes.currentGameList}>
                   {
                     currentGames.map((game, index) => (
-                      <ListItem button key={index}>
-                        <p className={classes.text}>
-                          {game}
-                        </p>
-                      </ListItem>
+                      <div key={index + user.id}>
+                        <ListItem style={{ flexDirection: 'column', alignItems: 'flex-start' }} button>
+                          <p className={classes.text}>
+                            Name: {game.name} <br/>
+                          </p>
+                          <div
+                            style={{
+                              width: '100%',
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'space-between'
+                            }}
+                          >
+                            <p className={classes.textSmall}>
+                              ID: {game.id}
+                            </p>
+                            <p className={classes.textSmall}>
+                              Opponent: {game.players.filter(player => player.id !== user.id)[0].username} <br/>
+                            </p>
+                          </div>
+                        </ListItem>
+                        <Divider />
+                      </div>
                     ))
                   }
                 </List>

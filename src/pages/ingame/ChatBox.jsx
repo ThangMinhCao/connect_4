@@ -86,11 +86,11 @@ const ChatBox = ({userID, roomID, messages}) => {
             token: localStorage.getItem('account_token')
           }, 
         });
+        setCurrentMessage('');
       } catch (err) {
         console.log('An error occurs: ', err.response.data);
       }
     }
-    setCurrentMessage('');
   }
 
   useEffect(() => {

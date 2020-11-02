@@ -1,6 +1,9 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import HomeIcon from '@material-ui/icons/Home';
+import IconButton from '@material-ui/core/IconButton';
 import FONTS from '../../constants/fonts';
 import COLORS from '../../constants/colors';
 
@@ -61,6 +64,14 @@ const useStyles = makeStyles({
     margin: padding,
     backgroundColor: (props) => props.yourTurn ? props.discColor : props.opponentDiscColor,
     transition: 'all 0.5s ease',
+  },
+
+  homeButton: {
+    position: 'absolute',
+    color: 'white',
+    top: 10,
+    left: 10,
+    backgroundColor: 'black'
   }
 });
 
@@ -68,6 +79,7 @@ const GameInfoDrawer = ({
   roomName, roomID, yourTurn, discColor, opponentDiscColor, movesPlayed
 }) => {
   const classes = useStyles({ yourTurn, discColor, opponentDiscColor });
+  const history = useHistory();
 
   const renderCircle = () => {
     return (
@@ -79,6 +91,9 @@ const GameInfoDrawer = ({
     <div
       className={classes.drawer}
     >
+      <IconButton onClick={() => history.push('/room')} className={classes.homeButton}>
+        <HomeIcon />
+      </IconButton>
       {renderCircle()}
       <div className={classes.drawerTurnState}>
         <Typography variant="h4" className={`${classes.text} ${classes.drawerTurnStateText}`}>

@@ -79,9 +79,9 @@ const getAllUsers = async (request, response) => {
   try {
     const users = (await User.find()).filter((user) => user.public);
     request.app.get('socketio').emit('allUsers', users);
-    // response.json({
-    //   users,
-    // })
+    response.json({
+      message: "Get all user successfully!"
+    })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -95,6 +95,9 @@ const getFriendList = async (request, response) => {
       'id': { "$in": user.friends }
     });
     request.app.get('socketio').emit(`friendList#${userID}`, friendList);
+    response.json({
+      message: "Get friend list successfully!"
+    })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -108,6 +111,9 @@ const getFriendRequests = async (request, response) => {
       'id': { "$in": user.comingFriendRequests }
     });
     request.app.get('socketio').emit(`friendRequests#${userID}`, requests);
+    response.json({
+      message: "Get friend requests successfully!"
+    })
   } catch (err) {
     response.status(400).send(err);
   }
@@ -135,6 +141,9 @@ const logout = async (request, response) => {
       "$set": {
         online: false,
       }
+    })
+    response.json({
+      message: "Logout successfully!"
     })
   } catch (err) {
     response.status(400).send(err);
