@@ -25,6 +25,9 @@ Project: Connect 4
 
 5.  Username: orange
     Password: orangepassword
+    
+########################## Initialize DB Script ########################
+In the connect_4 directory: ./initializeDB.sh
 
 
 ########################## Game play UI instructions ########################
