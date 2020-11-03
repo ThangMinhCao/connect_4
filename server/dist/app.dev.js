@@ -23,7 +23,7 @@ var server = http.createServer(app);
 var io = socketio(server, {
   transports: ['polling']
 });
-var PORT = process.env.PORT || 5000;
+var PORT = process.env.PORT || 4000;
 app.set('socketio', io);
 app.get(function (req, res) {
   res.sendFile(path.resolve(__dirname, '../build', 'index.html'));
