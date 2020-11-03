@@ -6,12 +6,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { connectDB, dbURI } = require('./database/mongodb');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server, { transports: ['polling'] }); 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 app.set('socketio', io);
 app.get((req, res) => {
