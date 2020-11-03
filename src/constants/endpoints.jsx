@@ -1,5 +1,6 @@
+const { PORT } = process.env
 const ENDPOINTS = {
-  index: 'http://localhost:4000/',
+  index: PORT || 'http://localhost:5000/',
   signup: '/users/signup',
   login: '/users/login',
   logout: '/users/logout',
