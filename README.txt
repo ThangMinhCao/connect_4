@@ -4,11 +4,11 @@ Student Number: 101147025
 Project Check-in #1:
 Project: Connect 4
  ** Working individually **
+    
+########################## Initialize DB Script ########################
+** The database is initialized on OpenStack, so this script is only used if needed **
 
-########################## Install instructions ########################
-1. Start terminal, navigate to /connect_4 (current directory), run 'npm install' to install all dependencies for the app.
-2. In the same directory (/connect_4), run 'npm run dev' to start both the project's Node.js server on localhost:4000 and React server on localhost:3000.
-3. Go to localhost:3000 on any browser to test the application (recommend Chrome).
+In the connect_4 directory: ./initializeDB.sh
 
 ########################## Initialized Game Accounts ########################
 1.  Username: apple
@@ -25,12 +25,50 @@ Project: Connect 4
 
 5.  Username: orange
     Password: orangepassword
+
+########################## OpenStack information #######################
+IP: 134.117.130.242
+Username: student
+Password: thang101147025
+
+########################## OpenStack Instruction #######################
+****The project is built and installed on the ssh server, you don't need to install anything on OpenStack
+1. IMPORTANT: Connect to the instance with port 4000 that listens to the localhost:4000 of the ssh server by:
+
+        ssh -L 4000:localhost:4000 student@134.117.130.242
+
+    Then enter the password given above. After that, please just ignore the warning: 
+        "channel 3: open failed: connect failed: Connection refused".
+    It happens because the ssh server is waiting for the port 4000 to show something and it doesn't affect the following steps.
+
+2. Redirect to ~/connect_4:
+
+        cd connect_4
     
-########################## Initialize DB Script ########################
-In the connect_4 directory: ./initializeDB.sh
+    If not in $HOME:
 
+        cd ~/connect_4
 
-########################## Game play UI instructions ########################
+3. Start the server on port 4000 (also 4000 in our normal system - based on step 1):
+
+        npm start
+
+4. Open a browser on your computer (Chrome is recommended) and visit: localhost:4000
+5. Login using the initialized accounts or sign up for a new account and start using the game's client
+
+########################## Install instructions (if use the dev version in the submitted zip file) ########################
+1. Start terminal, navigate to /connect_4 (current directory), run 'npm install' to install all dependencies for the app.
+2. In the same directory (/connect_4), run 'npm run dev' to start both the project's Node.js server on localhost:4000 and React server on localhost:3000.
+3. Go to localhost:3000 on any browser to test the application (recommend Chrome).
+
+########################## Main extensions ##########################
+- React
+- Material UI
+- React Konva
+- socket.io
+- express-jwt
+
+########################## Game play UI instructions (If using a new account) ########################
 1. Sign up for a new account, then login. There must be one or more other players to start playing.
    You can open an incogito/private browser window or using another browser (using chrome, open firefox) to create account, login and try the app.
 2. Create a new room, that room will appear on your 'Not started games' list, and show 'Waiting', and appear on every client's all public room list.
@@ -196,6 +234,13 @@ CLIENT SIDE:
         - token: String
         - targetID: String
 
+* GET/users/currentGamesInfo: get all current games of a given user ID 
+    Middlewares:
+        - Authorization middleware the verify the access token
+    Params: 
+        - token: String
+        - targetID: String
+
 ---------- Ingame routes ------------
 * POST/games/create: use to create a new game room
     Middlewares:
@@ -265,8 +310,5 @@ CLIENT SIDE:
 * Friend system finished: add friend, accept/reject requests, unfriend, cancel sending request
 * See active friend list (The UI mockup is on the top right corner's button).
 * Chat in game
-*** NOTE: every changes related to game room, user are automatically updated when thay have changes. Possibly still having some bugs. ***
-
-################### Not finished Functionalities ###############
-* User information for game history and current games (mockup available by clicking on the user search bar and click on one of them).
-* Some additional functionalities like remove room, surrender, choosing disc color, sounds, gameplay effects/animations maybe added.
+* Game history
+* Current game in user info
