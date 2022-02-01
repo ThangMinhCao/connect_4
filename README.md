@@ -1,24 +1,14 @@
 # Connect 4
 
-### Initialized Game Accounts
-1.  Username: apple
-    Password: applepassword
-   
-2.  Username: mango
-    Password: mangopassword
-   
-3.  Username: pineapple
-    Password: pineapplepassword
-   
-4.  Username: watermelon
-    Password: watermelonpassword
-
-5.  Username: orange
-    Password: orangepassword
+Online realtime Connect 4 game built with MERN stack.
 
 ### Main Technologies
 - React with JavaScript
+- Node.js server with Express.js
+- Socket.IO for realtime gameplay
+- MongoDB
+
+### Additional Libraries
+- express-jwt
 - Material UI
 - React Konva (Canvas for React)
-- Socket.IO
-- express-jwt
